@@ -1,10 +1,10 @@
 // all data for AI on an empty page
 import React, { useEffect, useState } from "react";
-  import {windWordDescription} from  './api/wd3';
-  interface Weather {
-    description: string;
-    main: string;
-  }
+ import { windWordDescription, visibilityWordDescription } from  './api/wd3';
+interface Weather {
+  description: string;
+  main: string;
+}
 
 type WeatherData = {
   id: number;
@@ -32,13 +32,14 @@ const ClientPage = () => {
       const temperatureCelsius = data?.main?.feels_like;
       const visibility = data?.visibility;
       const windSpeed = data?.wind?.speed;
-      const windDescription = windSpeed !== undefined ? windWordDescription(windSpeed) : "N/A"; 
+    const windDescription = windWordDescription(windSpeed ?? 0); 
+    const visibilityDescription = visibilityWordDescription(visibility ?? 0);
       const currentMonthInWords = new Date().toLocaleString("default", {
         month: "long",
       });
 
       useEffect(() => {
-        fetch("/api/wd3?location=Paris")
+        fetch("/api/wd3?location=London")
           .then((response) => {
             if (!response.ok) {
               throw new Error("Network response was not ok");
@@ -66,8 +67,8 @@ const ClientPage = () => {
               <p>Weather main: {weatherMain} </p>
               <p>Weather main-description: {weatherDescription} </p>
               <p>Temperature: {temperatureCelsius}°C</p>
-              <p>Visibility: {visibility ?? "N/A"}</p>
-              <p>WindSpeed: {windDescription}</p> 
+              <p>Visibility description: {visibilityDescription}</p>
+              <p>Wind : {windDescription}</p>
               <p>Current Month: {currentMonthInWords}</p>
             </div>
           ) : (
