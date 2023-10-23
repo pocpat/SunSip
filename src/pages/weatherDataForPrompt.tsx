@@ -26,9 +26,10 @@ type Wind = {
 
 const ClientPage = () => {    
       const [data, setData] = useState<WeatherData | null>(null);
+      const [location, setLocation] = useState("");
       const weatherDescription = data?.weather?.[0]?.description;
       const weatherMain = data?.weather?.[0]?.main;
-      const cityName = data?.name;
+      // const cityName = data?.name;
       const temperatureCelsius = data?.main?.feels_like;
       const visibility = data?.visibility;
       const windSpeed = data?.wind?.speed;
@@ -39,7 +40,7 @@ const ClientPage = () => {
       });
 
       useEffect(() => {
-        fetch("/api/wd3?location=London")
+        fetch("/api/wd3?location=${location}")
           .then((response) => {
             if (!response.ok) {
               throw new Error("Network response was not ok");
@@ -56,14 +57,14 @@ const ClientPage = () => {
               error,
             );
           });
-      }, []);
+      }, [location]);
 
       return (
         <div>
           {data ? (
             <div>
               <p>ID: {data.id}</p>
-              <p>City: {cityName}</p>
+              <input type="text" value={location} onChange={e => setLocation(e.target.value)}/>
               <p>Weather main: {weatherMain} </p>
               <p>Weather main-description: {weatherDescription} </p>
               <p>Temperature: {temperatureCelsius}°C</p>
@@ -86,3 +87,5 @@ Wind: {windSpeed}m/s {windWordDescription(windSpeed) ?? 'N/A'}
 </p> */}
 
 //  just a test
+
+{/* <p>City: {cityName}</p> */}
