@@ -1,3 +1,4 @@
+// BE for data fetching
 import type { NextApiRequest, NextApiResponse } from "next";
 
 interface Weather {
@@ -21,6 +22,35 @@ type Wind = {
   description: (windSpeed: number) => string;
 };
 
+function windWordDescription(windSpeed: number): string {
+  switch (true) {
+    case windSpeed < 1:
+      return "Calm";
+    case windSpeed < 6:
+      return "Light Air";
+    case windSpeed < 12:
+      return "Light Breeze";
+    case windSpeed < 20:
+      return "Gentle Breeze";
+    case windSpeed < 29:
+      return "Moderate Breeze";
+    case windSpeed < 39:
+      return "Fresh Breeze";
+    case windSpeed < 50:
+      return "Strong Breeze";
+    case windSpeed < 62:
+      return "Near Gale";
+    case windSpeed < 75:
+      return "Gale";
+    case windSpeed < 89:
+      return "Strong Gale";
+    case windSpeed < 103:
+      return "Storm";
+    default:
+      return "Hurricane";
+  }
+
+}
 
 export async function processResponce(location: string): Promise<WeatherData> {
   const response = await fetch(
@@ -48,34 +78,36 @@ export default async function handler(
       temperatureKelvin ? temperatureKelvin - 273.15 : 0,
     );
     const windSpeed = data?.wind?.speed?? 0;
-    function windWordDescription(windSpeed: number): string {
-      switch (true) {
-        case windSpeed < 1:
-          return "Calm";
-        case windSpeed < 6:
-          return "Light Air";
-        case windSpeed < 12:
-          return "Light Breeze";
-        case windSpeed < 20:
-          return "Gentle Breeze";
-        case windSpeed < 29:
-          return "Moderate Breeze";
-        case windSpeed < 39:
-          return "Fresh Breeze";
-        case windSpeed < 50:
-          return "Strong Breeze";
-        case windSpeed < 62:
-          return "Near Gale";
-        case windSpeed < 75:
-          return "Gale";
-        case windSpeed < 89:
-          return "Strong Gale";
-        case windSpeed < 103:
-          return "Storm";
-        default:
-          return "Hurricane";
-      }
-    }
+    //  function windWordDescription(windSpeed: number): string {
+    //   switch (true) {
+    //     case windSpeed < 1:
+    //       return "Calm";
+    //     case windSpeed < 6:
+    //       return "Light Air";
+    //     case windSpeed < 12:
+    //       return "Light Breeze";
+    //     case windSpeed < 20:
+    //       return "Gentle Breeze";
+    //     case windSpeed < 29:
+    //       return "Moderate Breeze";
+    //     case windSpeed < 39:
+    //       return "Fresh Breeze";
+    //     case windSpeed < 50:
+    //       return "Strong Breeze";
+    //     case windSpeed < 62:
+    //       return "Near Gale";
+    //     case windSpeed < 75:
+    //       return "Gale";
+    //     case windSpeed < 89:
+    //       return "Strong Gale";
+    //     case windSpeed < 103:
+    //       return "Storm";
+    //     default:
+    //       return "Hurricane";
+    //   }
+    
+    // }
+    
 
     if (
       data.weather !== undefined &&
