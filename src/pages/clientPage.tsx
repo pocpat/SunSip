@@ -83,3 +83,5 @@ const ClientPage = () => {
 {/* <p>
 Wind: {windSpeed}m/s {windWordDescription(windSpeed) ?? 'N/A'}
 </p> */}
+
+//  just a test
