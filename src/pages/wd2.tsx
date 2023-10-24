@@ -1,91 +1,97 @@
-import  React,  { useState } from "react";
+// pink client side page
+import React, { useState } from 'react'
 interface Weather {
-  description: string;
-  main: string;
+  description: string
+  main: string
 }
 interface Option {
-  id: number;
-  name: string;
-  weather: Weather[];  
+  id: number
+  name: string
+  weather: Weather[]
   main: {
-    feels_like: number;
-  };
-  message?: string;
-  wind?: {speed: number};
-  visibility?: number;
-  temperature?: number;
-  windSpeed?: number;
+    feels_like: number
+  }
+  message?: string
+  wind?: { speed: number }
+  visibility?: number
+  temperature?: number
+  windSpeed?: number
 }
 
 const Wd2 = (): JSX.Element => {
-  const [location, setLocation] = useState<string>("");
-  const [options, setOptions] = useState<Option[]>([]);
-  const [data, setData] = useState<Option | null>(null);
-  const weatherDescription = data?.weather?.[0]?.description;
-  const cityName = data?.name;
-const temperature = data?.main?.feels_like;
-const windSpeed = data?.wind?.speed;
-const visibility = data?.visibility;
+  const [location, setLocation] = useState<string>('')
+  const [options, setOptions] = useState<Option[]>([])
+  const [data, setData] = useState<Option | null>(null)
+  const weatherDescription = data?.weather?.[0]?.description
+  const cityName = data?.name
+  const temperature = data?.main?.feels_like
+  const windSpeed = data?.wind?.speed
+  const visibility = data?.visibility
 
   const getSearchOptions = (value: string) => {
     try {
       fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${value}&appid=${process.env.REACT_APP_API_KEY}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${value}&appid=${process.env.REACT_APP_API_KEY}`,
       )
         .then((res) => {
           if (!res.ok) {
             if (res.status === 404) {
-              setOptions([]);
+              setOptions([])
             } else {
-              throw new Error(`Request failed with status: ${res.status}`);
+              throw new Error(`Request failed with status: ${res.status}`)
             }
           } else {
-            return res.json();
+            return res.json()
           }
         })
-        .then((data: { 
-          id: number; 
-          name: string; 
-          main?: { feels_like: number }; 
-          wind?:{speed: number};
-          visibility?: number; 
-        
-        }) => {          if (data) {
-            const newOptions: Option[] = [
-              {
-                id: data.id,
-                name: data.name,
-                main: {
-                  feels_like: data.main?.feels_like ?? 0,
+        .then(
+          (data: {
+            id: number
+            name: string
+            main?: { feels_like: number }
+            wind?: { speed: number }
+            visibility?: number
+            temperature?: number
+            windSpeed?: number
+            weather?: Weather[]
+          }) => {
+            if (data) {
+              const newOptions: Option[] = [
+                {
+                  id: data.id,
+                  name: data.name,
+                  main: {
+                    feels_like: data.main?.feels_like ?? 0,
+                  },
+                  wind: {
+                    speed: data.wind?.speed ?? 0,
+                  },
+                  visibility: data.visibility ?? 0,
+                  temperature: 0,
+                  windSpeed: 0,
+                  weather: [],
                 },
-                wind: {
-                  speed: data.wind?.speed ?? 0,
-                },
-                visibility: data.visibility ?? 0,
-                temperature: 0,
-                windSpeed: 0,
-                weather: [],
-              },
-            ];
-            setOptions(newOptions);
-          }
-        })
+              ]
+              setOptions(newOptions)
+            }
+          },
+        )
         .catch((error) => {
           // Handle API request error
-          console.error(error);
-        });
+          console.error(error)
+        })
     } catch (error) {
       // Handle other errors
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
-       const value = e.target.value.trim();
-    setLocation(value);
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim()
+    setLocation(value)
     // if (value === "") return;
     // getSearchOptions(value);
-  };
+  }
 
   return (
     <div className="flex h-[100vh] w-full items-center justify-center bg-gradient-to-br from-sky-400 via-rose-400 to-lime-400">
@@ -114,15 +120,14 @@ const visibility = data?.visibility;
           >
             Search
           </button>
-
-
-          {options.map((option: Option) => (
-            <p key={option.id}>{option.name}</p>
-          ))}
         </div>
+
+        {options.map((option: Option) => (
+          <p key={option.id}>{option.name}</p>
+        ))}
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default Wd2;
+export default Wd2
