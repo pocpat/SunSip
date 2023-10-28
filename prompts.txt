@@ -1,0 +1,252 @@
+prompts:
+
+960X512
+
+832 X 640  
+
+640X 480 
+
+512 X 512
+
+==============================================================
+From a point of view just one meter away from a large window that takes up two-thirds of the right-side wall, capture a luxurious and cozy room scene overlooking a street. The room is richly decorated, exuding an air of comfort and affluence. In the corner of the room, there’s a close-up view of an open book on a chair covered with a plush, fluffy blanket nautical scene. in the style of Alberto Seveso colorful. digital, expressionism, vibrant, high contrast Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 2185468179
+=================================================================
+ cozy, a big opened window , curtains , fluffy blankets, books create a inside cabin window scene in a cute little cottage in the style of Hendrik Meyer' Farmhouse by a Stream, sunshiny day
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 4125523937; Stats: 
+        Took 7.66s total (7.66s per image)
+        Peak memory usage: 7501 MiB / 8192 MiB / 91.555%
+================================================================================
+cozy, a big opened window , curtains , fluffy blankets, books create a inside cabin window scene in a cute little cottage in the style of in the style of Alphonse Mucha’s Art nouveau, finely drawn 1920s woman with pale pastel colors Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3473137859; Stats: Took 7.47s total (7.47s per image) Peak memory usage: 7497 MiB / 8192 MiB / 91.508%
+===============================================================================
+cozy, a big opened window , curtains , fluffy blankets, books create a inside cabin window scene in a cute little cottage in the style of in the style of in the style of Carne Griffiths realism, scene, portrait Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 334393814; Stats: Took 4.91s total (4.91s per image) Peak memory usage: 6144 MiB / 8192 MiB / 75.0%
+=================================================================================
+cozy, a big opened window , curtains , fluffy blankets, books create a inside cabin window scene in a cute little cottage in the style of Artgerm Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3289111963; Stats: Took 5.18s total (5.18s per image) Peak memory usage: 6177 MiB / 8192 MiB / 75.403%
+==================================================================================
+cozy, a big opened window , curtains , fluffy blankets, books create a inside cabin window scene in a cute little cottage in the style of Artgerm Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 73495153; Stats: Took 5.32s total (5.32s per image) Peak memory usage: 6199 MiB / 8192 MiB / 75.665%
+=====================================================================================
+fancy window from inside Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1076634212; Stats: Took 7.2s total (7.2s per image) Peak memory usage: 7592 MiB / 8192 MiB / 92.664%
+==========================================================================================
+cozy window from inside, fluffy blankets, fantasy , detailed, closeup, warm light, sharp focus, by pascal blanche Rutkowski Repin Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 12675093; Stats: Took 7.08s total (7.08s per image) Peak memory usage: 7553 MiB / 8192 MiB / 92.188%
+======================================================================================
+
+cozy window from inside in the style of Jordan Grimmer
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 368774847; Stats: 
+        Took 4.83s total (4.83s per image)
+        Peak memory usage: 6200 MiB / 8192 MiB / 75.68%
+============================================================================
+cozy window from inside in the style of Jordan Grimmer
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1623606590; Stats: 
+        Took 4.8s total (4.8s per image)
+        Peak memory usage: 6203 MiB / 8192 MiB / 75.712%
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3964265580; Stats: 
+        Took 4.8s total (4.8s per image)
+        Peak memory usage: 6198 MiB / 8192 MiB / 75.653%
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1933150778; Stats: 
+        Took 4.85s total (4.85s per image)
+        Peak memory usage: 6204 MiB / 8192 MiB / 75.721%
+===============================================================================
+cozy window from inside, fluffy blanket, a book, in the style of Jordan Grimmer
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 4265373153; Stats: 
+        Took 4.89s total (4.89s per image)
+        Peak memory usage: 6201 MiB / 8192 MiB / 75.692%
+================================================================================
+
+cozy window from inside , low angle, fluffy blanket, in style of Alena Aenami vibrant, landscape, digital Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3747882104, Denoising strength: 0.75; Stats: Took 4.34s total (4.34s per image) Peak memory usage: 6224 MiB / 8192 MiB / 75.975%
+===================================================================================
+
+cozy window from inside , fluffy blanket, in style of Alena Aenami vibrant, landscape, digital Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 368903495, Denoising strength: 0.75; Stats: Took 4.33s total (4.33s per image) Peak memory usage: 6612 MiB / 8192 MiB / 80.71%
+
+====================================================================================
+cozy window from inside , a table on the left side, in style of Anne Stokes fantasy, dark, character Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1684495301, Denoising strength: 0.75; Stats: Took 4.33s total (4.33s per image) Peak memory usage: 6610 MiB / 8192 MiB / 80.678%
+
+====================================================================================
+
+
+cozy window from inside , a table on the left side, in style of Arthur Adams detailed, clean, action, hero, comic
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3744142947, Denoising strength: 0.75; Stats: 
+        Took 4.01s total (4.01s per image)
+        Peak memory usage: 6220 MiB / 8192 MiB / 75.927%
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 903318607, Denoising strength: 0.75; Stats: 
+        Took 4.36s total (4.36s per image)
+        Peak memory usage: 6205 MiB / 8192 MiB / 75.743%
+====================================================================================
+cozy window from inside , a table on the left side, in style of Audrey Kawasaki art nouveau, manga, portrait
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3076594397, Denoising strength: 0.75; Stats: 
+        Took 4.07s total (4.07s per image)
+        Peak memory usage: 6518 MiB / 8192 MiB / 79.564%
+
+====================================================================================
+cozy window from inside , a table on the left side, in style of Keith Parkinson
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3009184558, Denoising strength: 0.75; Stats: 
+        Took 4.27s total (4.27s per image)
+        Peak memory usage: 6631 MiB / 8192 MiB / 80.943%
+
+====================================================================================
+
+cozy window from inside , a table on the left side, in style of Mike Allred comics, vibrant
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 3078182387, Denoising strength: 0.75; Stats: 
+        Took 4.38s total (4.38s per image)
+        Peak memory usage: 6214 MiB / 8192 MiB / 75.848%
+====================================================================================
+
+cozy window from inside , a table on the left side, in style of Studio Gilbi whimsical, anime, children's illustration
+
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1849059351, Denoising strength: 0.75; Stats: 
+        Took 4.42s total (4.42s per image)
+        Peak memory usage: 6616 MiB / 8192 MiB / 80.757%
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1314005116, Denoising strength: 0.75; Stats: 
+        Took 4.32s total (4.32s per image)
+        Peak memory usage: 6395 MiB / 8192 MiB / 78.064%
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 457818847, Denoising strength: 0.75; Stats: 
+        Took 4.6s total (4.6s per image)
+        Peak memory usage: 6600 MiB / 8192 MiB / 80.558%
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 2417997853, Denoising strength: 0.75; Stats: 
+        Took 4.45s total (4.45s per image)
+        Peak memory usage: 6216 MiB / 8192 MiB / 75.872%
+
+Steps: 30, Sampler: k_euler, CFG scale: 7.5, Seed: 1513160805, Denoising strength: 0.75; Stats: 
+        Took 4.3s total (4.3s per image)
+        Peak memory usage: 6463 MiB / 8192 MiB / 78.892%
+
+
+====================================================================================
+
+
+====================================================================================
+
+
+====================================================================================
+
+
+====================================================================================
+
+
+
+
+ a  cottage living room,  bookshelf, fluffy blanket on a small cozy chair,  clos up to  a big window,  warm colors, coffee table with a book , rustic, furniture, fantasy , detailed
+
+ a  luxury  living room, French style,  close up to  a big window,  bookshelf, fluffy blanket on a small cozy chair,  warm colors, coffee table with a book , rustic, furniture, fantasy , detailed
+
+a big window in a luxury living room in French style, rustic, furniture, fantasy , detailed
+
+a big window in a luxury French style, rustic, furniture, fluffy blankets, books, fantasy , detailed
+
+cozy, a big  window , curtains ,  fluffy blankets, books, fantasy , detailed, closeup, warm light, sharp focus, by pascal blanche Rutkowski Repin
+
+cozy, a big  window , curtains ,  fluffy blankets, books, fantasy , detailed, closeup, warm light, by pascal blanche Rutkowski Repin
+
+cozy, a big opened window , curtains ,  fluffy blankets, books, fantasy , detailed, closeup, warm light, French style
+
+From a point of view just one meter away from a large window that takes up two-thirds of the right-side wall, capture a luxurious and cozy room scene overlooking a street lined with trees.  The room is richly decorated, exuding an air of comfort and affluence. In the corner of the room, there’s a close-up view of an open book on a bed covered with a plush, fluffy bege blanket
+
+cozy window from inside,
+
+
+for README file:
+there is APIs for :
+
+outside :   OpenWeather.com  (current weather data for a city)
+local :     StableDefusion   (text to img)
+
+
+
+
+
+paint a ..... in the style of Pierre Bonnard “Little Printable Garden”, colorful blobs
+
+
+create a inside cabin window scene in a cute little cottage in the style of Hendrik Meyer' Farmhouse by a Stream, sunshiny day
+
+
+
+.... nautical scene in the style of Sandro Botticelli’s Birth of Venus, mystical, light and bright
+
+.... in the style of Alphonse Mucha’s Art nouveau, finely drawn 1920s woman with pale pastel colors
+
+
+a.j.Casson
+Alberto Seveso    colorful. digital, expressionism, vibrant, high contrast
+
+Artgerm
+Brooke Shaden
+Carne Griffiths realism, scene, portrait
+James Gilleard
+Jordan Grimmer
+Leonid Afremov vibrant, stained glass, impressionism
+
+ anime, scene, dark, magic realism, 
+
+
+
+
+Chiho Aoshima     pop art, colorful, whimsical, anime, fantasy, vibrant
+
+Hayao Miyazaki    aka Studio Ghibi, whimsical, anime, children's illustration
+
+Jim Burns    sci-fi, scene, furniture
+
+Mark Keathley magic realism
+
+Mattias Adolfsson detailed, whimsical, watercolor
+
+Miki Asai   photography, vibrant, macro
+
+Patrice Murciano  colorful, vibrant, portrait
+
+Pixar   character, colorful
+
+Salvador Dali    surrealism, dark
+
+sarah Andersen   cartoon, comics, high contrast
+
+Alberto Seveso character, colorful, digital, expressionism, vibrant
+
+Alan Lee   fantasy, realism, romanticism
+Alena Aenami   vibrant, landscape, digital
+
+Alexander Averin  impressionism, scene
+Alexander Jansson   fantasy, whimsical, dark
+Alyssa Monks  figurativism, portrait, photorealism
+Andreas Franke  photography, scene, surrealism
+Anna Dittmann portrait, fantasy, digital
+Anne Stokes  fantasy, dark, character
+Arthur Adams  detailed, clean, action, hero, comic
+Audrey Kawasaki  art nouveau, manga, portrait
+Bastien Lecouffe-Dehame  digital, dark, fantasy, character
+Boris Vallejo  character, fantasy, sci-fi
+Bruce Pennington fantasy, landscape, scene, sci-fi
+Charles Addams  monochromatic, scene, cartoon
+Gerald Brom  dark, fantasy
+H.R.Giger sci-fi, dark, monochromatic
+Keith Parkinson
+Mike Allred comics, vibrant
+Studio Gilbi   whimsical, anime, children's illustration
+
+
+
+

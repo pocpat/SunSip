@@ -40,31 +40,8 @@ const WeatherDataForPrompt = () => {
     month: 'long',
   })
 
-  useEffect(() => {
-    fetch(`/api/wd3?location=${location}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        return response.json()
-      })
-      .then((data: WeatherData | null) => {
-        if (data?.message) {
-          setData(null)
-          setError(data.message)
-        } else {
-          setData(data)
-          setError(null)
-        }
-      })
-      .catch((error: Error) => {
-        console.error(
-          'There has been a problem with your fetch operation:',
-          error,
-        )
-        setError(error.message)
-      })
-  }, [location])
+
+
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim()
@@ -72,14 +49,35 @@ const WeatherDataForPrompt = () => {
     // if (value === "") return;
     // WeatherDataForPrompt();
   }
-
+  const fetchData: () => Promise<void> = async () => {
+    try {
+      const response = await fetch(`/api/wd3?location=${location}`)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const data: WeatherData = await response.json()
+      if (data?.message) {
+        setData(null)
+        setError(data.message)
+      } else {
+        setData(data)
+        setError(null)
+      }
+    } catch (error) {
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      )
+      setError(error.message)
+    }
+  }
   return (
     <div>
       <input
         type="text"
         value={location}
-        onChange={onInputChange}
-        placeholder="Enter a place"
+      onChange={onInputChange}
+        placeholder="Got a city in mind? Share it here!"
         className="w-full rounded-l-md border-2
            border-gray-300 p-2 focus:border-transparent 
            focus:outline-none focus:ring-2
@@ -87,7 +85,7 @@ const WeatherDataForPrompt = () => {
       />
       <button
         className="bg-blue-600 text-white p-2 rounded-r-md"
-        onClick={() => setLocation(location)}
+        onClick={fetchData}
       >
         Search
       </button>
@@ -117,3 +115,5 @@ const WeatherDataForPrompt = () => {
 }
 
 export default WeatherDataForPrompt
+
+

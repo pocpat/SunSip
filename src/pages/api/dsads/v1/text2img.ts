@@ -5,7 +5,7 @@ interface Txt2ImgResponse {
   }
 
 // Define the URL and the payload to send
-const url = "http://127.0.0.1:7860/sdapi/v1/txt2img";
+const url = "http://127.0.0.1:8501/sdapi/v1/txt2img";
 const payload = {
     "prompt": "puppy dog",
     "steps": 5

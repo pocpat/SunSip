@@ -1,0 +1,82 @@
+sentences to use on your front page:
+
+City Input Prompt:
+
+“Enter your city and let’s discover its weather together!”
+“Type in a city and let’s paint its weather picture!”
+“What’s your city? Let’s check out its current weather!”
+“Name your city, let’s explore its weather!”
+“Got a city in mind? Share it here!”
+“Your city? Let’s reveal its weather!”
+“Share your city, let SunSip reveal its weather!”
+“SunSip asks: What’s your city?”
+“Your city? SunSip is ready to shine!”
+"Where are you today? 🌍"
+"Tell us your city, and let's find the sun ☀️"
+Ready for some sun and sips? Enter your city!"
+"Let's chase the sun. Tell us where you are!"
+"City, please? Let's find your perfect sip."
+****    "Where are you today? We'll take care of the rest."
+"Time for a sunny sip. Type in your city!"
+
+
+
+Weather Display:
+
+“Here’s what the weather looks like in {city} right now.”
+“Presenting {city}'s current weather, visualized just for you.”
+“This is how {city} is feeling right now.”
+“Behold, {city}'s current weather.”
+“Visualizing {city}'s weather now.”
+***     “{City} at this moment.”
+****    “SunSip’s view of {city} now.”
+****    “{City} under the SunSip lens.”
+It's [Temperature]°C in [City Name] – perfect sipping weather! 🍹"
+****    "It's a [Weather Condition] day in [City Name] - time to sip!"
+
+
+Drink Suggestion:
+
+“Based on {city}'s mood, here’s a drink to match!”
+“To go with {city}'s weather, we suggest this refreshing drink!”
+“{City}'s weather calls for this delightful drink!”
+“{City}'s mood, your drink!”
+“A drink for {city}'s weather!”
+“Sip this, {city} style!”
+“SunSip’s sunny sip for {city}!”
+****      “A SunSip special for {city}'s weather!”
+“Enjoy a SunSip, {city} style!”
+"Sip suggestion: [Drink Name] 🍹"
+"Enjoy a refreshing [Drink Name] to match your mood today! 🍹"
+****    "Why not try a [Drink Name] to match the weather? 🍹"
+****    "Elevate your day with [Drink Name] - perfect for this weather! 🍹"
+****    "How about sipping on [Drink Name] today? 🍹"
+
+
+
+
+
+"Chase the Sun, Sip the Fun!
+Find Your Ideal Drink 🍹"
+
+"City of Sun, Drink of Fun!
+Tell Us Your City ☀️🍹"
+
+"Sip Happens ☀️
+Find Your Sun-Kissed Sip!"
+
+"Sun's Up, Sip's Up! 🌞🍹
+Tell Us Where You Are!"
+
+"Drinks as Sunny as Your Day ☀️
+Type in Your City!"
+
+"One Click to Sunshine ☀️
+Find Your SunSip!"
+
+"Forecast the Fun, Sip in the Sun!
+Share Your City ☀️🍹"
+
+"Your Daily Dose of Sun & Sip 🌞🍹
+What's Your City?"
+
