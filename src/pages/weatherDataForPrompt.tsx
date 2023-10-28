@@ -27,6 +27,9 @@ const WeatherDataForPrompt = () => {
   const [data, setData] = useState<WeatherData | null>(null)
   const [location, setLocation] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [displayedLocation, setDisplayedLocation] = useState('');
+
 
   const weatherDescription = data?.weather?.[0]?.description
   const weatherMain = data?.weather?.[0]?.main
@@ -49,28 +52,30 @@ const WeatherDataForPrompt = () => {
     // if (value === "") return;
     // WeatherDataForPrompt();
   }
-  const fetchData: () => Promise<void> = async () => {
+  const fetchData = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch(`/api/wd3?location=${location}`)
+      const response = await fetch(`/api/wd3?location=${location}`);
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error('Network response was not ok');
       }
-      const data: WeatherData = await response.json()
+      const data: WeatherData = await response.json() as WeatherData;
       if (data?.message) {
-        setData(null)
-        setError(data.message)
+        setData(null);
+        setError(data.message);
       } else {
-        setData(data)
-        setError(null)
+        setData(data);
+        setError(null);
+        setDisplayedLocation(location);
       }
-    } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      )
-      setError(error.message)
+      console.log('Fetch data operation completed');
+    } catch (error: unknown) {
+      console.error('There has been a problem with your fetch operation:', error);
+      setError(error as string);
     }
-  }
+    setIsLoading(false);
+  };
+  
   return (
     <div>
       <input
@@ -85,12 +90,12 @@ const WeatherDataForPrompt = () => {
       />
       <button
         className="bg-blue-600 text-white p-2 rounded-r-md"
-        onClick={fetchData}
+        onClick={() => { void fetchData() }}
       >
         Search
       </button>
       <div>
-        {error ? <p>Error: {error}</p> : data ? <p>Loading...</p> : null}
+      {error ? <p>Error: {error}</p> : isLoading ? <p>Loading...</p> : null}
       </div>
       {data ? (
         <div>
@@ -99,7 +104,7 @@ const WeatherDataForPrompt = () => {
           <div className="mt-10 flex  md:mt-4"></div>
 
           {/* <input type="text" value={location} onChange={e => setLocation(e.target.value)}/> */}
-          <p>City name: {location}</p>
+          <p>City name: {displayedLocation}</p>
           <p>Weather main: {weatherMain} </p>
           <p>Weather main-description: {weatherDescription} </p>
           <p>Temperature: {temperatureCelsius}°C</p>
@@ -107,9 +112,7 @@ const WeatherDataForPrompt = () => {
           <p>Wind : {windDescription}</p>
           <p>Current Month: {currentMonthInWords}</p>
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      ) : null}
     </div>
   )
 }
