@@ -1,32 +1,24 @@
 // all data for AI on an empty page
 import React, { useEffect, useState } from 'react'
-import { windWordDescription, visibilityWordDescription } from './api/wd3'
-interface Weather {
-  description: string
-  main: string
-}
+import { 
+  windWordDescription, 
+  visibilityWordDescription,  
+    //=================== *** ===================
+  processResponce } from './api/wd3'
 
-type WeatherData = {
-  id: number
-  name: string
-  weather: Weather[]
-  main: {
-    temp: number
-    feels_like: number
-  }
-  message?: string
-  wind: Wind
-  visibility: number
-}
-type WindowImg = {
-  img: string
-  errMessage: string
-}
+  import { Weather, type WeatherData, Wind, type WindowImg } from '../utils/weatherTypes';
 
-type Wind = {
-  speed: number
-  description: (windSpeed: number) => string
+
+  //=================== *** ===================
+async function fetchWeatherData(location: string): Promise<WeatherData> {
+  return await processResponce(location);
 }
+  //==========================================
+
+
+
+
+
 
 const WeatherDataForPrompt = () => {
   const [data, setData] = useState<WeatherData | null>(null)
@@ -83,6 +75,22 @@ const WeatherDataForPrompt = () => {
     }
     setIsLoading(false)
   }
+  //=================== *** ===================
+  function buildPrompt(weatherData: WeatherData): string {
+    // Build your prompt using weatherData here
+    let prompt1 = `Weather report for ${weatherData.name} (ID: ${weatherData.id}):\n`;
+    prompt1 += `Weather: ${weatherData.weather.map((w) => w.description).join(', ')}\n`;
+    prompt1 += `Feels like: ${weatherData.main.feels_like}°C\n`;
+    prompt1 += `Wind speed: ${weatherData.wind.speed}\n`;
+    prompt1 += `Wind description: ${weatherData.wind.description}\n`;
+    prompt1 += `Visibility: ${weatherData.visibility}\n`;
+  
+    return prompt1;
+  }
+  //==========================================
+
+
+
 
   return (
     <div>
