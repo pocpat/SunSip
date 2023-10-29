@@ -18,6 +18,11 @@ type WeatherData = {
   wind: Wind
   visibility: number
 }
+type WindowImg = {
+  img: string
+  errMessage: string
+}
+
 type Wind = {
   speed: number
   description: (windSpeed: number) => string
@@ -27,9 +32,9 @@ const WeatherDataForPrompt = () => {
   const [data, setData] = useState<WeatherData | null>(null)
   const [location, setLocation] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false);
-  const [displayedLocation, setDisplayedLocation] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false)
+  const [displayedLocation, setDisplayedLocation] = useState('')
+  const [imgWD, setImgWD] = useState<WindowImg | null>(null)
 
   const weatherDescription = data?.weather?.[0]?.description
   const weatherMain = data?.weather?.[0]?.main
@@ -43,8 +48,7 @@ const WeatherDataForPrompt = () => {
     month: 'long',
   })
 
-
-
+  
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim()
@@ -53,35 +57,39 @@ const WeatherDataForPrompt = () => {
     // WeatherDataForPrompt();
   }
   const fetchData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const response = await fetch(`/api/wd3?location=${location}`);
+      const response = await fetch(`/api/wd3?location=${location}`)
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok')
       }
-      const data: WeatherData = await response.json() as WeatherData;
-      if (data?.message) {
-        setData(null);
-        setError(data.message);
+
+      // to chenge Weather data for IMG
+      const dataWindow: WindowImg = (await response.json()) as WindowImg
+      if (dataWindow?.errMessage) {
+        setImgWD(null)
+        setError(dataWindow.errMessage)
       } else {
-        setData(data);
-        setError(null);
-        setDisplayedLocation(location);
+        setImgWD(dataWindow)
+        setError(null)
       }
-      console.log('Fetch data operation completed');
+      console.log('Fetch window-img operation is completed')
     } catch (error: unknown) {
-      console.error('There has been a problem with your fetch operation:', error);
-      setError(error as string);
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      )
+      setError(error as string)
     }
-    setIsLoading(false);
-  };
-  
+    setIsLoading(false)
+  }
+
   return (
     <div>
       <input
         type="text"
         value={location}
-      onChange={onInputChange}
+        onChange={onInputChange}
         placeholder="Got a city in mind? Share it here!"
         className="w-full rounded-l-md border-2
            border-gray-300 p-2 focus:border-transparent 
@@ -90,12 +98,14 @@ const WeatherDataForPrompt = () => {
       />
       <button
         className="bg-blue-600 text-white p-2 rounded-r-md"
-        onClick={() => { void fetchData() }}
+        onClick={() => {
+          void fetchData()
+        }}
       >
         Search
       </button>
       <div>
-      {error ? <p>Error: {error}</p> : isLoading ? <p>Loading...</p> : null}
+        {error ? <p>Error: {error}</p> : isLoading ? <p>Loading...</p> : null}
       </div>
       {data ? (
         <div>
@@ -119,4 +129,14 @@ const WeatherDataForPrompt = () => {
 
 export default WeatherDataForPrompt
 
-
+// // to chenge Weather data for IMG
+// const data: WeatherData = await response.json() as WeatherData;
+// if (data?.message) {
+//   setData(null);
+//   setError(data.message);
+// } else {
+//   setData(data);
+//   setError(null);
+//   setDisplayedLocation(location);
+// }
+// console.log('Fetch data operation completed');

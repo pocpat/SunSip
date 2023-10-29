@@ -1,5 +1,6 @@
 // BE for data fetching
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { string } from 'zod'
 
 interface Weather {
   description: string
@@ -21,7 +22,10 @@ type Wind = {
   speed: number
   description: (windSpeed: number) => string
 }
-
+type WindowImg = {
+  img: string
+  errMessage: string
+}
 export function windWordDescription(windSpeed: number): string {
   switch (true) {
     case windSpeed < 1:
@@ -89,6 +93,11 @@ export default async function handler(
     const windSpeed = parseFloat(req.query.windSpeed as string);
     const description = windWordDescription(windSpeed);
 
+
+
+
+
+
     if (
       data.weather !== undefined &&
       data.weather.length > 0 &&
@@ -100,21 +109,57 @@ export default async function handler(
           main: weather.main,
         })) ?? []
 
-      res.status(200).json({
-        id: data.id,
-        name: data.name,
-        weather: weatherData,
-        main: {
-          feels_like: temperatureCelsius,
-        },
-        wind: {
-          speed: windSpeed,
-          // description: windWordDescription,
-        } as Wind,
-        visibility: data.visibility,
-      
-      })
+
+        const promptData : WeatherData= {
+          id: data.id,
+          name: data.name,
+          weather: weatherData,
+          main: {
+            feels_like: temperatureCelsius,
+          },
+          wind: {
+            speed: windSpeed,
+            // description: windWordDescription,
+          } as Wind,
+          visibility: data.visibility,
+        
+        }
+
+
+
+// call to SD: ?????
+const buildPrompt = (promptData: WeatherData): string =>  { 
+  let prompt1 = `Weather report for ${promptData.name} (ID: ${promptData.id}):\n`;
+  prompt1 += `Weather: ${promptData.weather}\n`;
+  prompt1 += `Feels like: ${promptData.main.feels_like}°C\n`;
+  prompt1 += `Wind speed: ${promptData.wind.speed}\n`;
+  // Uncomment the line below if you want to include wind description
+  prompt1 += `Wind description: ${promptData.wind.description}\n`;
+  prompt1 += `Visibility: ${promptData.visibility}\n`;
+
+let promptWindow = `View of ${promptData.name} in ${promptData.main.feels_like}°C weather with ${promptData.wind.speed} km/h winds and ${promptData.visibility} m visibility.`;
+
+
+  return prompt;
+
+  
+  }
+  
+  const prompt: string = buildPrompt(data)
+  
+   const generatedImg = handlerSD (prompt)
+
+
+      res.status(200).json(
+          { img : generatedImg }
+
+
+
+      )
       console.log(data)
+
+
+
     } else {
       res.status(500).json({
         id: 0,
