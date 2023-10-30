@@ -1,6 +1,12 @@
 // BE for data fetching
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Weather, WeatherData, Wind, WindowImg } from '../../utils/weatherTypes'
+import {
+  Weather,
+  WeatherData,
+  Wind,
+  WindowImg,
+  windowPrompt,
+} from '../../utils/weatherTypes'
 
 export function windWordDescription(windSpeed: number): string {
   switch (true) {
@@ -39,7 +45,18 @@ export function visibilityWordDescription(visibility: number) {
   else if (visibility > 1000) return 'Poor'
   else return 'Very Poor'
 }
+export function temperatureWordDescription(temperatureKelvin: number) {
+  const temperatureCelsius = temperatureKelvin - 273.15
 
+  if (temperatureCelsius < -20) return 'Freezing'
+  else if (temperatureCelsius < 0) return 'Very Cold'
+  else if (temperatureCelsius < 10) return 'Cold'
+  else if (temperatureCelsius < 20) return 'Cool'
+  else if (temperatureCelsius < 30) return 'Mild'
+  else if (temperatureCelsius < 35) return 'Warm'
+  else if (temperatureCelsius < 40) return 'Hot'
+  else return 'Very Hot'
+}
 export async function processResponce(location: string): Promise<WeatherData> {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${location}&include=current&appid=${process.env.REACT_APP_API_KEY}`,
@@ -53,6 +70,36 @@ export async function processResponce(location: string): Promise<WeatherData> {
   }
 }
 
+const buildPrompt = (promptData: WeatherData): string => {
+  if (!promptData.weather[0]) {
+    return 'No weather data available'
+  }
+  const currentMonthInWords = new Date().toLocaleString('default', {
+    month: 'long',
+  })
+  const temperatureDescription =
+    promptData.main.feels_like !== undefined
+      ? temperatureWordDescription(promptData.main.feels_like)
+      : 'Temperature data not available'
+
+  const visibilityDescription =
+    promptData.visibility !== undefined
+      ? visibilityWordDescription(promptData.visibility)
+      : 'Visibility data not available'
+  const windDescription =
+    promptData.wind !== undefined
+      ? windWordDescription(promptData.wind.speed)
+      : 'Wind data not available'
+  return `City: ${promptData.name} 
+    in ${currentMonthInWords}, 
+    weather: ${promptData.weather[0].description}, 
+    ${promptData.weather[0].main}, 
+    ${visibilityDescription}, 
+    ${windDescription}, 
+     ${temperatureDescription}° is outside, 
+    bush.`
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<WeatherData>,
@@ -61,12 +108,6 @@ export default async function handler(
     const location =
       typeof req.query.location === 'string' ? req.query.location : ''
     const data = await processResponce(location)
-    const temperatureKelvin = data?.main?.feels_like
-    const temperatureCelsius = Math.floor(
-      temperatureKelvin ? temperatureKelvin - 273.15 : 0,
-    )
-    const windSpeed = parseFloat(req.query.windSpeed as string)
-    // const description = windWordDescription(windSpeed)
 
     if (
       data.weather !== undefined &&
@@ -78,21 +119,23 @@ export default async function handler(
           description: weather.description,
           main: weather.main,
         })) ?? []
+      const prompt = buildPrompt(data)
 
       res.status(200).json({
         id: data.id,
         name: data.name,
         weather: weatherData,
         main: {
-          feels_like: temperatureCelsius,
+          feels_like: data.main.feels_like,
         },
-        wind: {
-          speed: windSpeed,
-          // description: windWordDescription,
-        } as Wind,
+        wind: data.wind
+          ? {
+              speed: data.wind.speed,
+            }
+          : undefined,
         visibility: data.visibility,
+        buildPrompt: prompt,
       })
-      console.log(data)
     } else {
       res.status(500).json({
         id: 0,

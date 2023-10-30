@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { WeatherData } from '../utils/weatherTypes'
+import { windWordDescription, visibilityWordDescription, temperatureWordDescription } from '../pages/api/wd3'
+
+
 
 const windDescription = (speed: number) => {
   if (speed < 1) {
@@ -59,8 +62,8 @@ const WeatherDescrComponent = ({ data }: { data: WeatherData | null }) => {
   const cityName = data?.name
   const weatherDescription = data?.weather?.[0]?.description
   const weatherMain = data?.weather?.[0]?.main
-  const temperatureCelsius = data?.main?.feels_like
-  const visibility = data?.visibility
+  const temperatureCelsius = data?.main?.feels_like;
+  const temperatureDescription = temperatureCelsius ? temperatureWordDescription(temperatureCelsius) : 'Temperature data not available';  const visibility = data?.visibility
   const windSpeed = data?.wind?.speed
   const wind = windDescription(windSpeed ?? 0)
   const visibilityDesc = visibilityDescription(visibility ?? 0)
@@ -75,7 +78,7 @@ const WeatherDescrComponent = ({ data }: { data: WeatherData | null }) => {
   ${weatherDescription}, 
   ${visibilityDesc}, 
   ${wind}, 
-  with ${temperatureCelsius}°C temperature, 
+   ${temperatureDescription} is outside, 
    bush.`
 
   return (
@@ -90,11 +93,12 @@ const WeatherDescrComponent = ({ data }: { data: WeatherData | null }) => {
           <p>City name: {cityName}</p>
           <p>Weather main: {weatherMain} </p>
           <p>Weather main-description: {weatherDescription} </p>
-          <p>Temperature: {temperatureCelsius}°C</p>
+          <p> {temperatureDescription} is outside</p>
           <p>Visibility description: {visibilityDesc}</p>
           <p>Wind : {wind}</p>
           <p>Current Month: {currentMonthInWords}</p>
           <p>Window Prompt: {windowPrompt}</p>
+          <p>THIS IS TEXT FROM COMPONENT</p>
         </div>
       ) : null}
     </div>
