@@ -14,6 +14,7 @@ export interface Weather {
     message?: string;
     wind?: { speed: number };
     visibility?: number;
+    currentMonthInWords?: string;
   }
   
   export type Wind = {

@@ -248,5 +248,23 @@ Mike Allred comics, vibrant
 Studio Gilbi   whimsical, anime, children's illustration
 
 
+====================================================================================
 
+
+====================================================================================
+
+
+====================================================================================
+  const windowPrompt = 
+  `
+  City: ${cityName} 
+  in ${currentMonthInWords}, 
+  weather: ${weatherDescription}, 
+  ${weatherDescription}, 
+  ${visibilityDesc}, 
+  ${wind}, 
+  with ${temperatureCelsius}°C temperature, 
+   bush.`
+
+negative : people, animals
 

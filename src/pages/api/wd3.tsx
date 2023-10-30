@@ -1,11 +1,57 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { processResponce, WeatherData, windWordDescription } from './weatherDataForPrompt'; // Import necessary functions and types
-import { Weather, WeatherData, Wind, WindowImg } from '../../utils/weatherTypes';
+// BE for data fetching
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { Weather, WeatherData, Wind, WindowImg } from '../../utils/weatherTypes'
 
+export function windWordDescription(windSpeed: number): string {
+  switch (true) {
+    case windSpeed < 1:
+      return 'Calm'
+    case windSpeed < 6:
+      return 'Light Air'
+    case windSpeed < 12:
+      return 'Light Breeze'
+    case windSpeed < 20:
+      return 'Gentle Breeze'
+    case windSpeed < 29:
+      return 'Moderate Breeze'
+    case windSpeed < 39:
+      return 'Fresh Breeze'
+    case windSpeed < 50:
+      return 'Strong Breeze'
+    case windSpeed < 62:
+      return 'Near Gale'
+    case windSpeed < 75:
+      return 'Gale'
+    case windSpeed < 89:
+      return 'Strong Gale'
+    case windSpeed < 103:
+      return 'Storm'
+    default:
+      return 'Hurricane'
+  }
+}
 
+export function visibilityWordDescription(visibility: number) {
+  if (visibility === undefined) return 'No data'
+  else if (visibility > 10000) return 'Excellent'
+  else if (visibility > 5000) return 'Good'
+  else if (visibility > 2000) return 'Moderate'
+  else if (visibility > 1000) return 'Poor'
+  else return 'Very Poor'
+}
 
+export async function processResponce(location: string): Promise<WeatherData> {
+  const response = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${location}&include=current&appid=${process.env.REACT_APP_API_KEY}`,
+  )
 
-
+  if (response.status >= 200 && response.status < 300) {
+    const data: WeatherData = (await response.json()) as WeatherData
+    return data
+  } else {
+    throw new Error(`Request failed with status: ${response.status}`)
+  }
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,36 +59,40 @@ export default async function handler(
 ) {
   try {
     const location =
-      typeof req.query.location === 'string' ? req.query.location : '';
-    const data = await processResponce(location);
-
-    // Define temperatureCelsius and windSpeed based on your requirements
-    const temperatureCelsius = data?.main?.feels_like;
-    const windSpeed = data?.wind?.speed;
+      typeof req.query.location === 'string' ? req.query.location : ''
+    const data = await processResponce(location)
+    const temperatureKelvin = data?.main?.feels_like
+    const temperatureCelsius = Math.floor(
+      temperatureKelvin ? temperatureKelvin - 273.15 : 0,
+    )
+    const windSpeed = parseFloat(req.query.windSpeed as string)
+    // const description = windWordDescription(windSpeed)
 
     if (
       data.weather !== undefined &&
       data.weather.length > 0 &&
       data.weather[0] !== undefined
     ) {
-      // Build the prompt
-      const promptData: WeatherData = {
+      const weatherData =
+        data.weather?.map((weather) => ({
+          description: weather.description,
+          main: weather.main,
+        })) ?? []
+
+      res.status(200).json({
         id: data.id,
         name: data.name,
-        weather: data.weather,
+        weather: weatherData,
         main: {
           feels_like: temperatureCelsius,
         },
         wind: {
           speed: windSpeed,
-        },
+          // description: windWordDescription,
+        } as Wind,
         visibility: data.visibility,
-      };
-
-      // Call your handlerSD function to generate an image
-      const generatedImg = handlerSD(buildPrompt(promptData));
-
-      res.status(200).json({ img: generatedImg });
+      })
+      console.log(data)
     } else {
       res.status(500).json({
         id: 0,
@@ -52,10 +102,10 @@ export default async function handler(
         main: {
           feels_like: 0,
         },
-      });
+      })
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).json({
       id: 0,
       name: '',
@@ -64,6 +114,6 @@ export default async function handler(
       main: {
         feels_like: 0,
       },
-    });
+    })
   }
 }
