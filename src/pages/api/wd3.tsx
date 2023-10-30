@@ -7,6 +7,7 @@ import {
   WindowImg,
   windowPrompt,
 } from '../../utils/weatherTypes'
+import { handlerSD } from '~/lib/stableDiffServer'
 
 export function windWordDescription(windSpeed: number): string {
   switch (true) {
@@ -70,13 +71,14 @@ export async function processResponce(location: string): Promise<WeatherData> {
   }
 }
 
-const buildPrompt = (promptData: WeatherData): string => {
+export const buildPrompt = (promptData: WeatherData): string => {
   if (!promptData.weather[0]) {
     return 'No weather data available'
   }
   const currentMonthInWords = new Date().toLocaleString('default', {
     month: 'long',
   })
+
   const temperatureDescription =
     promptData.main.feels_like !== undefined
       ? temperatureWordDescription(promptData.main.feels_like)
@@ -86,6 +88,7 @@ const buildPrompt = (promptData: WeatherData): string => {
     promptData.visibility !== undefined
       ? visibilityWordDescription(promptData.visibility)
       : 'Visibility data not available'
+      
   const windDescription =
     promptData.wind !== undefined
       ? windWordDescription(promptData.wind.speed)
@@ -100,15 +103,14 @@ const buildPrompt = (promptData: WeatherData): string => {
     bush.`
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<WeatherData>,
-) {
+export default async function handler( 
+    req: NextApiRequest,
+     res: NextApiResponse<WeatherData | {imageDataUrl: string}>) {
   try {
     const location =
       typeof req.query.location === 'string' ? req.query.location : ''
     const data = await processResponce(location)
-
+ 
     if (
       data.weather !== undefined &&
       data.weather.length > 0 &&
@@ -120,22 +122,11 @@ export default async function handler(
           main: weather.main,
         })) ?? []
       const prompt = buildPrompt(data)
-
-      res.status(200).json({
-        id: data.id,
-        name: data.name,
-        weather: weatherData,
-        main: {
-          feels_like: data.main.feels_like,
-        },
-        wind: data.wind
-          ? {
-              speed: data.wind.speed,
-            }
-          : undefined,
-        visibility: data.visibility,
-        buildPrompt: prompt,
-      })
+      const imageDataUrl = await handlerSD(prompt);
+      res.status(200).json(
+        { ...data, imageDataUrl }
+        );
+     
     } else {
       res.status(500).json({
         id: 0,
