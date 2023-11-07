@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { api } from "~/utils/api";
 import { useState } from "react";
+import { WeatherData } from "~/utils/weatherTypes";
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -18,30 +19,32 @@ export default function Home() {
     setLocation(value)
   }
 
-  const fetchDataFromWeather = async () => {
+  const fetchWeatherInfoFromServer = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/weather1?location=${location}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      const resWeatherInfoFromServer = await fetch(`/api/weather1?location=${location}`);
+      if (!resWeatherInfoFromServer.ok) {
+        throw new Error('Network response was not OK');
       }
-      const data: WeatherData = await response.json() as WeatherData;
-      if (data?.message) {
-        setData(null);
-        setError(data.message);
+      const dataFromWeatherAPI = await resWeatherInfoFromServer.json() as WeatherData;
+      if (dataFromWeatherAPI?.message) {
+        setError(dataFromWeatherAPI.message);
       } else {
-        setData(data);
         setError(null);
         setDisplayedLocation(location);
       }
-      console.log('Fetch data operation completed');
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('There has been a problem with your fetch operation:', error);
-      setError(error as string);
+
+      // Insert the error handling code here
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        setError((error as Error).message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
     setIsLoading(false);
   };
-
 
 
 
@@ -70,7 +73,7 @@ export default function Home() {
       />
       <button
         className="bg-blue-600 text-white p-2 rounded-md"
-        // onClick={() => { void fetchDataFromWeather() }}
+         onClick={() => { void fetchWeatherInfoFromServer() }}
 
       >
         Search
