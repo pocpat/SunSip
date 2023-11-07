@@ -2,10 +2,48 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { api } from "~/utils/api";
-
+import { useState } from "react";
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const [location, setLocation] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [displayedLocation, setDisplayedLocation] = useState('');
+
+
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim()
+    setLocation(value)
+  }
+
+  const fetchDataFromWeather = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/weather1?location=${location}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data: WeatherData = await response.json() as WeatherData;
+      if (data?.message) {
+        setData(null);
+        setError(data.message);
+      } else {
+        setData(data);
+        setError(null);
+        setDisplayedLocation(location);
+      }
+      console.log('Fetch data operation completed');
+    } catch (error: unknown) {
+      console.error('There has been a problem with your fetch operation:', error);
+      setError(error as string);
+    }
+    setIsLoading(false);
+  };
+
+
+
 
   return (
     <>
@@ -19,6 +57,29 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+       <section className="flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <input
+        type="text"
+        onChange={onInputChange}
+        value={location}
+        placeholder="Got a city in mind? Share it here!"
+        className="w-full rounded-md border-2
+           border-gray-300 p-2 focus:border-transparent 
+           focus:outline-none focus:ring-2
+            focus:ring-blue-600"
+      />
+      <button
+        className="bg-blue-600 text-white p-2 rounded-md"
+        // onClick={() => { void fetchDataFromWeather() }}
+
+      >
+        Search
+      </button>
+      <div>
+      {error ? <p>Error: {error}</p> : isLoading ? <p>Loading...</p> : null}
+      </div>
+
+</section>
         <p className="text-2xl text-white">TEST MY STAFF</p>
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
