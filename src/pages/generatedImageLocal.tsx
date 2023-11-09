@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
 interface Txt2ImgResponse {
   images: string[]
 }
@@ -32,7 +33,7 @@ const GeneratedImageLocal = () => {
     void fetchImage()
   }, [])
   return (
-    <div>{imageSrc && <img src={imageSrc} alt="Generated" />}</div>
+    <div>{imageSrc && <Image src={imageSrc} alt="Generated" />}</div>
   )
 }
 export default GeneratedImageLocal

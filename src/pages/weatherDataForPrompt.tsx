@@ -1,5 +1,5 @@
 // all data for AI on an empty page
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { windWordDescription, visibilityWordDescription } from './api/wd3'
 interface Weather {
   description: string
@@ -52,7 +52,8 @@ const WeatherDataForPrompt = () => {
     // if (value === "") return;
     // WeatherDataForPrompt();
   }
-  const fetchData = async () => {
+  const fetchDataFromWeather
+   = async () => {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/wd3?location=${location}`);
@@ -90,7 +91,7 @@ const WeatherDataForPrompt = () => {
       />
       <button
         className="bg-blue-600 text-white p-2 rounded-r-md"
-        onClick={() => { void fetchData() }}
+        onClick={() => { void fetchDataFromWeather() }}
       >
         Search
       </button>
