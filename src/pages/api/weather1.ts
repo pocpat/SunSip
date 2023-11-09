@@ -75,14 +75,14 @@ export default async function handlerWeather(
       if (temperature < 250) {
         return "It's very cold outside."
       } else if (temperature >= 250 && temperature < 280) {
-        return "It's cool."
+        return "It's cool outside."
       } else if (temperature >= 280 && temperature < 298) {
         return "It's moderately cool outside."
-      } else if (temperature === 298) {
+      } else if (temperature >= 298 && temperature < 300) {
         return "It's mild temperature outside."
-      } else if (temperature === 300) {
+      } else if (temperature >= 300 && temperature < 310) {
         return "It's pleasant outside."
-      } else if (temperature === 310) {
+      } else if (temperature >= 310 && temperature < 315) {
         return "It's warm outside."
       } else if (temperature >= 315) {
         return "It's hot outside."
@@ -109,43 +109,34 @@ export default async function handlerWeather(
     //===================================================================================================
     
   //  send the prompt to the Stable Diffusion API
-
-    const fetchWeatherIMG = async (promptWeather: string) => {
-      const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
-
-      const payloadWindow = {
-        prompt: promptWeather,
-      }
-
-      // Send the payload to the API
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payloadWindow),
-      })
-        .then((response) => response.json())
-        .then((data: Txt2ImgResponse) => {
-          if (typeof data.images[0] === 'string') {
-            const imageBuffer = Buffer.from(data.images[0], 'base64')
-            fs.writeFileSync('./public/output.png', imageBuffer)
-            // const imageWindow = Image.open(io.BytesIO(base64.b64decode(r['images'][0])));
-            // image.save('output.png');
-
-            console.log('data.images[0] is:  ', 'output.png')
-          } else {
-            console.error('Expected a string but got', typeof data.images[0])
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-        })
+  const fetchWeatherIMG = async (promptWeather: string) => {
+    const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
+  
+    const payloadWindow = {
+      prompt: promptWeather,
+    }
+  
+    // Send the payload to the API
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payloadWindow),
+    });
+  
+    const data = (await response.json()) as Txt2ImgResponse;  
+    if (typeof data.images[0] === 'string') {
+      const imageBuffer = Buffer.from(data.images[0], 'base64');
+      fs.writeFileSync('./public/output.png', imageBuffer)
+    } else {
+      console.error('Expected a string but got', typeof data.images[0]);
+    }
   }
   await fetchWeatherIMG(promptWeather)
 
     res.status(200).json(
-      // output to client . example
+      // output to client side
       {
         image: './public/output.png',
       },
@@ -166,12 +157,38 @@ export default async function handlerWeather(
 
 
 
-// ==========================================================
-// Assuming `largeString` is the large string you're working with
-            // const largeString = "your large string here";
 
-// You can convert the string to a Buffer using Buffer.from()
-           // const buffer = Buffer.from(largeString);
 
-// You can then convert the Buffer back to a string when needed
-          // const string = buffer.toString();
+
+            //   const fetchWeatherIMG = async (promptWeather: string) => {
+  //     const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
+
+  //     const payloadWindow = {
+  //       prompt: promptWeather,
+  //     }
+
+  //     // Send the payload to the API
+  //     fetch(url, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(payloadWindow),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data: Txt2ImgResponse) => {
+  //         if (typeof data.images[0] === 'string') {
+  //           const imageBuffer = Buffer.from(data.images[0], 'base64')
+  //           fs.writeFileSync('./public/output.png', imageBuffer)
+  //           // const imageWindow = Image.open(io.BytesIO(base64.b64decode(r['images'][0])));
+  //           // image.save('output.png');
+
+  //           console.log('data.images[0] is:  ', 'output.png')
+  //         } else {
+  //           console.error('Expected a string but got', typeof data.images[0])
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error:', error)
+  //       })
+  // }
