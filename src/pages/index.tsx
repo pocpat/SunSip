@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { api } from "~/utils/api";
 import { useState } from "react";
-import { WeatherData } from "~/utils/weatherTypes";
+import type { WeatherData } from "~/utils/weatherTypes";
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });

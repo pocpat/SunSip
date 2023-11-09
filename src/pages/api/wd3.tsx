@@ -88,7 +88,7 @@ export default async function handler(
     )
     // const windSpeed = data?.wind?.speed ?? 0
     const windSpeed = parseFloat(req.query.windSpeed as string);
-    const description = windWordDescription(windSpeed);
+    // const description = windWordDescription(windSpeed);
 
     if (
       data.weather !== undefined &&

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { WeatherData } from '../../utils/weatherTypes'
-import axios from 'axios'
+import type {WeatherData } from '../../utils/weatherTypes'
+// import axios from 'axios'
 import fs from 'fs'
 
 type Txt2ImgResponse = {
@@ -70,7 +70,7 @@ export default async function handlerWeather(
       else return 'Very Poor'
     }
 
-    const temperature = weatherInfo.main.feels_like
+    // const temperature = weatherInfo.main.feels_like
     function temperatureWordDescription(temperature: number) {
       if (temperature < 250) {
         return "It's very cold outside."

@@ -21,12 +21,12 @@ interface Option {
 const Wd2 = (): JSX.Element => {
   const [location, setLocation] = useState<string>('')
   const [options, setOptions] = useState<Option[]>([])
-  const [data, setData] = useState<Option | null>(null)
-  const weatherDescription = data?.weather?.[0]?.description
-  const cityName = data?.name
-  const temperature = data?.main?.feels_like
-  const windSpeed = data?.wind?.speed
-  const visibility = data?.visibility
+  // const [data, setData] = useState<Option | null>(null)
+  // const weatherDescription = data?.weather?.[0]?.description
+  // const cityName = data?.name
+  // const temperature = data?.main?.feels_like
+  // const windSpeed = data?.wind?.speed
+  // const visibility = data?.visibility
 
   const getSearchOptions = (value: string) => {
     try {

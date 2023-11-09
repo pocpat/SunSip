@@ -1,5 +1,5 @@
 // all data for AI on an empty page
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { windWordDescription, visibilityWordDescription } from './api/wd3'
 interface Weather {
   description: string
