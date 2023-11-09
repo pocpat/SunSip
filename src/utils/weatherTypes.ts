@@ -42,3 +42,8 @@ export interface Weather {
   export type windowPrompt = {
     windowPrompt?: string;
     }
+
+    export interface Txt2ImgResponse {
+      images: string[];
+    
+    }

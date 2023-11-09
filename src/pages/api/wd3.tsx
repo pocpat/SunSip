@@ -1,6 +1,7 @@
 // BE for data fetching
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+
 interface Weather {
   description: string
   main: string
