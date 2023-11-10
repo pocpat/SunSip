@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type {WeatherData } from '../../utils/weatherTypes'
-// import axios from 'axios'
 import fs from 'fs'
 
 type Txt2ImgResponse = {
@@ -114,6 +113,7 @@ export default async function handlerWeather(
   
     const payloadWindow = {
       prompt: promptWeather,
+      negative_prompt:"people, animals"
     }
   
     // Send the payload to the API
@@ -128,7 +128,7 @@ export default async function handlerWeather(
     const data = (await response.json()) as Txt2ImgResponse;  
     if (typeof data.images[0] === 'string') {
       const imageBuffer = Buffer.from(data.images[0], 'base64');
-      fs.writeFileSync('./public/output.png', imageBuffer)
+      fs.writeFileSync('./public/windowView.png', imageBuffer)
     } else {
       console.error('Expected a string but got', typeof data.images[0]);
     }
@@ -136,9 +136,9 @@ export default async function handlerWeather(
   await fetchWeatherIMG(promptWeather)
 
     res.status(200).json(
-      // output to client side
+      // windowView to client side
       {
-        image: './public/output.png',
+        image: './public/windowView.png',
       },
     )
   } catch (error) {
@@ -179,11 +179,11 @@ export default async function handlerWeather(
   //       .then((data: Txt2ImgResponse) => {
   //         if (typeof data.images[0] === 'string') {
   //           const imageBuffer = Buffer.from(data.images[0], 'base64')
-  //           fs.writeFileSync('./public/output.png', imageBuffer)
+  //           fs.writeFileSync('./public/windowView.png', imageBuffer)
   //           // const imageWindow = Image.open(io.BytesIO(base64.b64decode(r['images'][0])));
-  //           // image.save('output.png');
+  //           // image.save('windowView.png');
 
-  //           console.log('data.images[0] is:  ', 'output.png')
+  //           console.log('data.images[0] is:  ', 'windowView.png')
   //         } else {
   //           console.error('Expected a string but got', typeof data.images[0])
   //         }

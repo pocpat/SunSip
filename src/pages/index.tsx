@@ -1,9 +1,17 @@
 import Head from "next/head";
 import Link from "next/link";
-
 import { api } from "~/utils/api";
 import { useState } from "react";
 import type { WeatherData } from "~/utils/weatherTypes";
+import loadingIcon from '/public/loading.gif'
+import Header from './components/Header'
+import { useUser } from "@auth0/nextjs-auth0";
+
+
+
+
+
+
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -58,26 +66,30 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
 
       </Head>
+      {/* <Header /> */}
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
        <section className="flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <h3 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">Got a city in mind?</h3>
         <input
         type="text"
         onChange={onInputChange}
         value={location}
-        placeholder="Got a city in mind? Share it here!"
+        placeholder=" Share it here!"
         className="w-full rounded-md border-2
            border-gray-300 p-2 focus:border-transparent 
            focus:outline-none focus:ring-2
             focus:ring-blue-600"
       />
+      <Link href="/cityWeather">
       <button
         className="bg-blue-600 text-white p-2 rounded-md"
          onClick={() => { void fetchWeatherInfoFromServer() }}
 
       >
-        Search
+        GO!
       </button>
+      </Link>
       <div>
       {error ? <p>Error: {error}</p> : isLoading ? <p>Loading...</p> : null}
       </div>
@@ -120,3 +132,25 @@ export default function Home() {
     </>
   );
 }
+
+
+
+
+// const AuthShowcase: React.FC = () => {
+//   const { user } = useUser();
+//   if (user) {
+//     return (
+//       <div className="text-2xl  font-normal text-primaryd">
+//         <h1>Hi {user.fullName}, welcome back.</h1>
+//       </div>
+//     );
+//   }
+//   return (
+//     <div>
+//       <p className="text-2xl font-bold text-primaryd">
+//         There are no current users signed in.
+//       </p>
+//     </div>
+//   );
+// };
+// export { AuthShowcase };

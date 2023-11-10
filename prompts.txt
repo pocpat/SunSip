@@ -27,3 +27,7 @@ don't give me an image, give me the prompt for this image
         =>    a prompt for SD
 ****************************************************
 
+COCKTAIL
+
+
+https://www.thecocktaildb.com/
