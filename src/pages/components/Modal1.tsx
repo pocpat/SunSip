@@ -23,7 +23,7 @@ const Modal1: React.FC<Modal1Props> = ({ isVisible, onClose, children }) => {
       id="wrapper"
     >
       <div className=" flex w-[600px]  flex-col" onClick={handleInnerClick}>
-        <div className="flex h-[300px] flex-col items-center justify-center rounded-lg bg-white ">
+        <div className="flex h-[300px] flex-col items-center justify-center rounded-lg  ">
           {children}
         </div>
       </div>
