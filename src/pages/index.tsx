@@ -5,7 +5,10 @@ import { useState } from "react";
 import type { WeatherData } from "~/utils/weatherTypes";
 import loadingIcon from '/public/loading.gif'
 import Header from './components/Header'
-import { useUser } from "@auth0/nextjs-auth0";
+// import { useUser } from "@auth0/nextjs-auth0";
+import styles from '../styles/Home.module.css'
+import Image from 'next/image'
+import wf from '/public/wf.png'
 
 
 
@@ -58,7 +61,16 @@ export default function Home() {
 
   return (
     <>
-    
+     <div className={styles.container}>
+     <div style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundImage: 'url(/wf.png)',
+        backgroundSize: 'cover',
+        opacity: 0.5,
+        zIndex: -1,
+      }} />
       <Head>
 
         <title>Create T3 App</title>
@@ -129,6 +141,7 @@ export default function Home() {
          
         </div>
       </main>
+      </div>
     </>
   );
 }

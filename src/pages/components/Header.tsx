@@ -2,7 +2,9 @@ import {useUser} from "@clerk/nextjs";
 export default function Header() {
   const {user} = useUser();
   return (
-    <div className="h-250 flex w-full items-center justify-between bg-accentd bg-clip-border  px-2 py-4">
+    <>
+
+    <div className="flex w-full items-center justify-between bg-accentd bg-clip-border h-30  px-2 py-4">
     <div className="text-primarydtext flex h-20 w-3/4 items-center  justify-start pl-5 text-3xl font-bold">
       {user?.firstName ? `Hi ${user.firstName}, welcome back.` : ""}
     </div>
@@ -23,5 +25,6 @@ export default function Header() {
       </div>
     </div>
   </div>
+  </>
 );
 };
