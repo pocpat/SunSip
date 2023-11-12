@@ -9,13 +9,16 @@ import Modal2 from './components/Modal2'
 import { Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import modalIMG from '/public/modalIMG6.png'
+import testImg from '/public/testImg.png'
 import styles from '../styles/Home.module.css'
 import wf from '/public/wf.png'
+import type { WeatherData } from '~/utils/weatherTypes';
 
 const CityWeather = () => {
   const [cocktail, setCocktail] = useState<CocktailData | null>(null)
   const [showModal1, setShowModal1] = useState(false)
   const [showModal2, setShowModal2] = useState(false)
+  const [weatherInfo, setWeatherInfo] = useState<WeatherData | null>(null);
 
   useEffect(() => {
     fetch('/api/cocktail1')
@@ -23,6 +26,15 @@ const CityWeather = () => {
       .then((data: CocktailData) => setCocktail(data))
       .catch((error) => console.error('Error fetching data:', error))
   }, [])
+
+
+  interface WeatherDataModalProps {
+    showModal2: boolean;
+    setShowModal2: React.Dispatch<React.SetStateAction<boolean>>;
+    weatherInfo: WeatherData | null; // Assuming WeatherData is the type of your weatherInfo
+  }
+
+
 
   // ======================>  Create Cocktail Modal <============================== //
   const CocktailMenuModal = () => {
@@ -170,9 +182,12 @@ const CityWeather = () => {
   // ========================================================================= //
 
     // ======================>  Create Weather Modal <============================== //
-    const WeatherDataModal = () => {
-      const handleBackButtonClick2 = () => {
+const WeatherDataModal: React.FC<WeatherDataModalProps> = ({ showModal2, setShowModal2, weatherInfo }) => {
+        const handleBackButtonClick2 = () => {
         setShowModal2(false) // Close the modal when the "Back" button is clicked
+      }
+      if (!weatherInfo) {
+        return null; // or handle the case where weatherInfo is null
       }
       return (
         <div>
@@ -194,12 +209,9 @@ const CityWeather = () => {
                 <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-blue-500 bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 ">
                   <div className="flex flex-shrink-0 items-center justify-between rounded-t-md   border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50  ">
                     {/* <!--Modal title--> */}
-                    <h5
-                      className="flex-1 items-center  text-center text-xl font-medium leading-normal text-primaryd dark:text-neutral-200"
-                      id="exampleModalLabel"
-                    >
-                      {cocktail && <p> {cocktail.strDrink}</p>}
-                    </h5>
+                    <h5 className="flex-1 items-center text-center text-xl font-medium leading-normal text-primaryd dark:text-neutral-200" id="exampleModalLabel">
+              {weatherInfo.name && <p>{weatherInfo.name}</p>}
+            </h5>
                     {/* <!--Close button--> */}
                     <button
                       type="button"
@@ -233,7 +245,7 @@ const CityWeather = () => {
                     <div className="flex flex-row">
                       <section>
                         <Image
-                          src={modalIMG}
+                          src={testImg}
                           alt="drink image"
                           width={300}
                           height={300}
@@ -241,10 +253,11 @@ const CityWeather = () => {
                       </section>
                       <div className="flex flex-col">
                         <div className="flex flex-row">
-                          <section className=" INGR mx-8 text-white">
+                          <section className=" mx-8 text-white">
                           section 1
+                          {weatherInfo.visibility && <p>{weatherInfo.visibility}</p>}
                           </section>
-                          <section className="PROD text-white">
+                          <section className=" text-white">
                            section 2
                           </section>
                        
@@ -296,9 +309,9 @@ const CityWeather = () => {
                   href="#"
                   onClick={() => setShowModal1(true)}
                 >
-                  <h3 className="text-2xl font-bold">Get Receipt</h3>
+                  <h3 className="text-2xl font-bold">Get Weather</h3>
                 </a>
-                {showModal1 && <CocktailMenuModal />}
+                <WeatherDataModal showModal2={showModal2} setShowModal2={setShowModal2} weatherInfo={weatherInfo} />
               </div>
             <button>Get Themperature</button>
             <button> back</button>
@@ -323,7 +336,7 @@ const CityWeather = () => {
                   href="#"
                   onClick={() => setShowModal1(true)}
                 >
-                  <h3 className="text-2xl font-bold">Get Receipt</h3>
+                  <h3 className="text-2xl font-bold">Get Recipe</h3>
                 </a>
                 {showModal1 && <CocktailMenuModal />}
               </div>

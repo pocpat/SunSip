@@ -1,10 +1,18 @@
 import React from "react";
+import type { WeatherData } from '../../utils/weatherTypes';
 
 type Modal2Props = {
   isVisible: boolean;
   onClose: () => void;
   children: React.ReactNode;
 };
+interface WeatherDataModalProps {
+  showModal2: boolean;
+  setShowModal2: React.Dispatch<React.SetStateAction<boolean>>;
+  weatherInfo: WeatherData | null; // Allow for null
+}
+
+
 
 const Modal2: React.FC<Modal2Props> = ({ isVisible, onClose, children }) => {
   if (!isVisible) return null;
