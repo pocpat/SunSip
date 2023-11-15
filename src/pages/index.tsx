@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { useState } from "react";
-import type { WeatherData } from "~/utils/weatherTypes";
+import type { WeatherData, WeatherDataResponse } from "~/utils/weatherTypes";
 import loadingIcon from '/public/loading.gif'
 import Header from './components/Header'
 // import { useUser } from "@auth0/nextjs-auth0";
@@ -37,9 +37,9 @@ export default function Home() {
       if (!resWeatherInfoFromServer.ok) {
         throw new Error('Network response was not OK');
       }
-      const dataFromWeatherAPI = await resWeatherInfoFromServer.json() as WeatherData;
-      if (dataFromWeatherAPI?.message) {
-        setError(dataFromWeatherAPI.message);
+      const dataFromWeatherAPI = await resWeatherInfoFromServer.json() as WeatherDataResponse;
+      if (dataFromWeatherAPI.weatherInfo?.message) {
+        setError(dataFromWeatherAPI.weatherInfo?.message);
       } else {
         setError(null);
         setDisplayedLocation(location);
@@ -96,6 +96,9 @@ export default function Home() {
       <Link href="/cityWeather">
       <button
         className="bg-blue-600 text-white p-2 rounded-md"
+        // TODO  fetchWeatherInfoFromServer() put in cityWeather.tsx inside  WeatherModal()
+        // TODO to use props for image and weather info
+        // TODO probably onCLick=> href="/cityWeather"
          onClick={() => { void fetchWeatherInfoFromServer() }}
 
       >

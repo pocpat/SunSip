@@ -1,12 +1,12 @@
 import React from "react";
 
-type Modal1Props = {
+type ModalRecipeProps = {
   isVisible: boolean;
   onClose: () => void;
   children: React.ReactNode;
 };
 
-const Modal1: React.FC<Modal1Props> = ({ isVisible, onClose, children }) => {
+const ModalRecipe: React.FC<ModalRecipeProps> = ({ isVisible, onClose, children }) => {
   if (!isVisible) return null;
   const handleClose = () => {
     onClose();
@@ -30,4 +30,4 @@ const Modal1: React.FC<Modal1Props> = ({ isVisible, onClose, children }) => {
     </div>
   );
 };
-export default Modal1;
+export default ModalRecipe;

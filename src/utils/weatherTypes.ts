@@ -29,6 +29,10 @@ export interface Weather {
     wind: Wind
     visibility: number
   }
+  export type WeatherDataResponse = {
+    weatherInfo: WeatherData,
+    image: string,
+  }
   
   export type Wind = {
     speed: number;

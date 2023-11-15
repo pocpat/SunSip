@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type {WeatherData } from '../../utils/weatherTypes'
+import type { WeatherDataResponse } from '../../utils/weatherTypes'
 import fs from 'fs'
 
 type Txt2ImgResponse = {
@@ -135,11 +136,16 @@ export default async function handlerWeather(
   }
   await fetchWeatherIMG(promptWeather)
 
+// create a instance of WeatherDataResponse as a local variable
+const weatherDataResponse: WeatherDataResponse = {
+  weatherInfo,
+  image: './public/windowView.png',
+}
+
     res.status(200).json(
       // windowView to client side
-      {
-        image: './public/windowView.png',
-      },
+      weatherDataResponse
+    ,
     )
   } catch (error) {
     console.error(error)
