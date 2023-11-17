@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import window from '/public/windowView.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from './components/Header'
@@ -8,15 +7,39 @@ import ModalRecipe from './components/ModalRecipe'
 import { Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import modalIMG from '/public/modalIMG6.png'
-import testImg from '/public/testImg.png'
 import styles from '../styles/Home.module.css'
-import wf from '/public/wf.png'
+// import wf from '/public/wf.png'
 import ModalWeather from './components/ModalWeather'
+import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
+import { set } from 'mongoose'
+import windowView from '/public/windowView.png'
+ import {useRouter} from 'next/router'
 
-const CityWeather = () => {
+
+
+//  function location() {
+//   // eslint-disable-next-line react-hooks/rules-of-hooks
+//   const router = useRouter()
+//   const location = router.query.location
+
+//   return <div>Location: {location}</div>
+// }
+
+const CityWeather = ( ) => {
   const [cocktail, setCocktail] = useState<CocktailData | null>(null)
   const [showModalRecipe, setShowModalRecipe] = useState(false)
   const [showModalWeather, setShowModalWeather] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null)
+  const [displayedLocation, setDisplayedLocation] = useState('');
+ const [weatherInfo, setWeatherInfo] = useState<WeatherData | null>(null);
+   const [weatherImage, setWeatherImage] = useState<string | null>(null);
+
+
+   const router = useRouter();
+   const location = router.query.location
+
+
 
   useEffect(() => {
     fetch('/api/cocktail1')
@@ -25,8 +48,47 @@ const CityWeather = () => {
       .catch((error) => console.error('Error fetching data:', error))
   }, [])
 
+  const fetchWeatherInfoFromServer = async (): Promise<void> => {
 
+    try {
+      const resWeatherInfoFromServer = await fetch(`/api/weather1?location=${location}`);
+  
+      if (!resWeatherInfoFromServer.ok) {
+        throw new Error('Network response was not OK');
+      }
+  
+      const dataFromWeatherAPI = (await resWeatherInfoFromServer.json()) as WeatherDataResponse;  
+      if (dataFromWeatherAPI.weatherInfo && dataFromWeatherAPI.image) {
+        // setWeatherInfo(dataFromWeatherAPI.weatherInfo);
+        // setWeatherImage(dataFromWeatherAPI.image);
+        const weatherImage= setWeatherImage(dataFromWeatherAPI.image);
+        const weatherInfo= setWeatherInfo(dataFromWeatherAPI.weatherInfo);
+        console.log(weatherImage)
+        console.log('the weather info from dataFromWeatherAPI is: ', weatherInfo)
+      }
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
 
+      // Insert the error handling code here
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        setError((error as Error).message);
+      } else {
+        setError('An unknown error occurred');
+      }
+    }
+    setIsLoading(false);
+  };
+
+useEffect(() => {
+    if (location) {
+      void fetchWeatherInfoFromServer();
+    }
+  }
+, [location]);
+// useEffect(() => {
+//    fetchWeatherInfoFromServer();
+// }
+// , []);
 
 
   // ======================>  Create Cocktail Modal <============================== //
@@ -236,14 +298,7 @@ const WeatherModal = () => {
                 data-te-modal-body-ref
               >
                 <div className="flex flex-row">
-                  <section>
-                    <Image
-                      src={modalIMG}
-                      alt="drink image"
-                      width={300}
-                      height={300}
-                    />
-                  </section>
+                 
                   <div className="flex flex-col">
                     <div className="flex flex-row">
                       <section className=" INGR mx-8 text-white">
@@ -314,13 +369,29 @@ const WeatherModal = () => {
           </section>
           <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
-            <Image
-              src={window}
-              alt="window_view"
-              width={600}
-              height={600}
-              className="mt-200"
-            />
+            {/* <Image
+  src={weatherImage ?? '/windowView.png'}
+  alt="window_view"
+  width={512}
+  height={512}
+  className="mt-200"
+/> */}
+      {weatherImage && <Image src={weatherImage} alt="Weather"  width={512}
+  height={512}  />}
+             <div>
+      {/* Your UI using weatherInfo */}
+      {weatherInfo && (
+        <div>
+          <h2> In {weatherInfo.name} now </h2>
+          <h2> temperature {weatherInfo.main.feels_like}</h2>
+          <h2>{weatherInfo.weather[0]?.description}</h2>
+          <h2> visibility is {weatherInfo.visibility} m</h2>
+          <h2>wind {weatherInfo.wind.speed} m/s</h2>
+        </div>
+      )}
+
+
+    </div>
           </section>
           <section className="flex flex-col items-center justify-center py-2 bg-yellow-500">
             right

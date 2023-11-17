@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type {WeatherData } from '../../utils/weatherTypes'
 import type { WeatherDataResponse } from '../../utils/weatherTypes'
 import fs from 'fs'
+import { response } from 'express'
 
 type Txt2ImgResponse = {
   images: string[]
@@ -9,7 +10,8 @@ type Txt2ImgResponse = {
 export async function getWeatherInfo(location: string) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${location}&include=current&appid=${process.env.REACT_APP_API_KEY}`,
-  )
+
+    )
 
   if (response.status >= 200 && response.status < 300) {
     const dataWeatherFromAPI: WeatherData =
@@ -95,6 +97,7 @@ export default async function handlerWeather(
       month: 'long',
     })
     const name = weatherInfo.name
+  console.log('weatherInfo:  ',weatherInfo)
     //===================================================================================================
     // Build a prompt for the image generator
     const promptWeather = `Show an image of 
@@ -139,7 +142,7 @@ export default async function handlerWeather(
 // create a instance of WeatherDataResponse as a local variable
 const weatherDataResponse: WeatherDataResponse = {
   weatherInfo,
-  image: './public/windowView.png',
+  image: '/windowView.png',
 }
 
     res.status(200).json(
