@@ -13,33 +13,21 @@ import ModalWeather from './components/ModalWeather'
 import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
 import { set } from 'mongoose'
 import windowView from '/public/windowView.png'
- import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 
-
-
-//  function location() {
-//   // eslint-disable-next-line react-hooks/rules-of-hooks
-//   const router = useRouter()
-//   const location = router.query.location
-
-//   return <div>Location: {location}</div>
-// }
-
-const CityWeather = ( ) => {
+const CityWeather = () => {
   const [cocktail, setCocktail] = useState<CocktailData | null>(null)
   const [showModalRecipe, setShowModalRecipe] = useState(false)
   const [showModalWeather, setShowModalWeather] = useState(false)
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [displayedLocation, setDisplayedLocation] = useState('');
- const [weatherInfo, setWeatherInfo] = useState<WeatherData | null>(null);
-   const [weatherImage, setWeatherImage] = useState<string | null>(null);
+  const [displayedLocation, setDisplayedLocation] = useState('')
+  const [weatherInfo, setWeatherInfo] = useState<WeatherData | null>(null)
+  const [weatherImage, setWeatherImage] = useState<string | null>(null)
+  // const [weatherImage, setWeatherImage] = useState('/windowView.png')
 
-
-   const router = useRouter();
-   const location = router.query.location
-
-
+  const router = useRouter()
+  const location = router.query.location as string
 
   useEffect(() => {
     fetch('/api/cocktail1')
@@ -49,49 +37,48 @@ const CityWeather = ( ) => {
   }, [])
 
   const fetchWeatherInfoFromServer = async (): Promise<void> => {
-
     try {
-      const resWeatherInfoFromServer = await fetch(`/api/weather1?location=${location}`);
-  
-      if (!resWeatherInfoFromServer.ok) {
-        throw new Error('Network response was not OK');
-      }
-  
-      const dataFromWeatherAPI = (await resWeatherInfoFromServer.json()) as WeatherDataResponse;  
+      const resWeatherInfoFromServer = await fetch(
+        `/api/weather1?location=${location}`,
+      )
+
+      const dataFromWeatherAPI =
+        (await resWeatherInfoFromServer.json()) as WeatherDataResponse
       if (dataFromWeatherAPI.weatherInfo && dataFromWeatherAPI.image) {
         // setWeatherInfo(dataFromWeatherAPI.weatherInfo);
         // setWeatherImage(dataFromWeatherAPI.image);
-        const weatherImage= setWeatherImage(dataFromWeatherAPI.image);
-        const weatherInfo= setWeatherInfo(dataFromWeatherAPI.weatherInfo);
+        const weatherImage = setWeatherImage(dataFromWeatherAPI.image)
+        const weatherInfo = setWeatherInfo(dataFromWeatherAPI.weatherInfo)
         console.log(weatherImage)
-        console.log('the weather info from dataFromWeatherAPI is: ', weatherInfo)
+        console.log(
+          'the weather info from dataFromWeatherAPI is: ',
+          weatherInfo,
+        )
       }
     } catch (error) {
-      console.error('There has been a problem with your fetch operation:', error);
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      )
 
       // Insert the error handling code here
       if (typeof error === 'object' && error !== null && 'message' in error) {
-        setError((error as Error).message);
+        setError((error as Error).message)
       } else {
-        setError('An unknown error occurred');
+        setError('An unknown error occurred')
       }
     }
-    setIsLoading(false);
-  };
-
-useEffect(() => {
-    if (location) {
-      void fetchWeatherInfoFromServer();
-    }
+    setIsLoading(false)
   }
-, [location]);
-// useEffect(() => {
-//    fetchWeatherInfoFromServer();
-// }
-// , []);
+
+  useEffect(() => {
+    if (location) {
+      void fetchWeatherInfoFromServer()
+    }
+  }, [])
 
 
-  // ======================>  Create Cocktail Modal <============================== //
+  //======================>  Create Cocktail Modal <============================== //
   const CocktailMenuModal = () => {
     const handleBackButtonClick = () => {
       setShowModalRecipe(false) // Close the modal when the "Back" button is clicked
@@ -165,42 +152,37 @@ useEffect(() => {
                       <div className="flex flex-row">
                         <section className=" INGR mx-8 text-white">
                           <strong>Ingredient 1:</strong>
-                          <br/>
+                          <br />
                           {cocktail?.strIngredient2 && (
                             <>
                               <strong>Ingredient 2:</strong>
-                            
                             </>
                           )}
-                       <br/>
+                          <br />
                           {cocktail?.strIngredient3 && (
                             <>
                               <strong>Ingredient 3:</strong>
-                             
                             </>
                           )}
-                         <br/>
+                          <br />
                           {cocktail?.strIngredient4 && (
                             <>
                               <strong>Ingredient 4:</strong>
-                            
                             </>
                           )}
-                          <br/>
+                          <br />
                           {cocktail?.strIngredient5 && (
                             <>
                               <strong>Ingredient 5:</strong>
-                             
                             </>
                           )}
-                          <br/>
+                          <br />
                           {cocktail?.strIngredient6 && (
                             <>
                               <strong>Ingredient 6:</strong>
-                           
                             </>
                           )}
-                        <br/>
+                          <br />
                         </section>
                         <section className="PROD text-white">
                           {cocktail && <p> {cocktail.strIngredient1}</p>}
@@ -235,103 +217,96 @@ useEffect(() => {
 
   // ========================================================================= //
   // ========================================================================= //
-  
-  // ======================>  Create Weather Modal <============================== //
-const WeatherModal = () => {
-  const handleBackButtonClick = () => {
-    setShowModalWeather(false) // Close the modal when the "Back" button is clicked
-  }
-  return (
-    <div>
-      <Transition
-        show={showModalWeather}
-        enter="transition-opacity duration-75"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <Fragment>
-          <ModalWeather
-            isVisible={showModalWeather}
-            onClose={() => setShowModalWeather(false)}
-            // children={undefined}
-          >
-            <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-blue-500 bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 ">
-              <div className="flex flex-shrink-0 items-center justify-between rounded-t-md   border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50  ">
-                {/* <!--Modal title--> */}
-                <h5
-                  className="flex-1 items-center  text-center text-xl font-medium leading-normal text-primaryd dark:text-neutral-200"
-                  id="exampleModalLabel"
-                >
-                
-                </h5>
-                {/* <!--Close button--> */}
-                <button
-                  type="button"
-                  className="box-content rounded-none border-none text-primaryd hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                  data-te-modal-dismiss
-                  aria-label="Close"
-                  onClick={() => setShowModalWeather(false)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="h-6 w-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
 
-              {/* <!--Modal body--> */}
-              <div
-                className="relative flex justify-between items-center justify-center bg-black p-0 first-line:flex-row"
-                data-te-modal-body-ref
-              >
-                <div className="flex flex-row">
-                 
-                  <div className="flex flex-col">
-                    <div className="flex flex-row">
-                      <section className=" INGR mx-8 text-white">
-                        <strong>Ingredient 1:</strong>
-                        <br/>
-                        {cocktail?.strIngredient2 && (
-                          <>
-                            <strong>Ingredient 2:</strong>
-                          
-                          </>
-                        )}
-                     <br/>
-                      
-                      </section>
-                    
+  // ======================>  Create Weather Modal <============================== //
+  const WeatherModal = () => {
+    const handleBackButtonClick = () => {
+      setShowModalWeather(false) // Close the modal when the "Back" button is clicked
+    }
+    return (
+      <div>
+        <Transition
+          show={showModalWeather}
+          enter="transition-opacity duration-75"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <Fragment>
+            <ModalWeather
+              isVisible={showModalWeather}
+              onClose={() => setShowModalWeather(false)}
+              // children={undefined}
+            >
+              <div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-blue-500 bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600 ">
+                <div className="flex flex-shrink-0 items-center justify-between rounded-t-md   border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50  ">
+                  {/* <!--Modal title--> */}
+                  <h5
+                    className="flex-1 items-center  text-center text-xl font-medium leading-normal text-primaryd dark:text-neutral-200"
+                    id="exampleModalLabel"
+                  ></h5>
+                  {/* <!--Close button--> */}
+                  <button
+                    type="button"
+                    className="box-content rounded-none border-none text-primaryd hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                    data-te-modal-dismiss
+                    aria-label="Close"
+                    onClick={() => setShowModalWeather(false)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* <!--Modal body--> */}
+                <div
+                  className="relative flex justify-between items-center justify-center bg-black p-0 first-line:flex-row"
+                  data-te-modal-body-ref
+                >
+                  <div className="flex flex-row">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row">
+                        <section className=" INGR mx-8 text-white">
+                          <strong>Ingredient 1:</strong>
+                          <br />
+                          {cocktail?.strIngredient2 && (
+                            <>
+                              <strong>Ingredient 2:</strong>
+                            </>
+                          )}
+                          <br />
+                        </section>
+                      </div>
                     </div>
-                   
                   </div>
                 </div>
-              </div>
-              {/* <!--Modal footer--> */}
-              <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md   bg-blue-500 border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-                {/* <ButtonBack onClick={handleBackButtonClick} />
+                {/* <!--Modal footer--> */}
+                <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md   bg-blue-500 border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                  {/* <ButtonBack onClick={handleBackButtonClick} />
                   <ButtonNext href="/input/waiting/editing/common" /> */}
-                <button> Close</button>
+                  <button> Close</button>
+                </div>
               </div>
-            </div>
-          </ModalWeather>
-        </Fragment>
-      </Transition>
-    </div>
-  )
-}
+            </ModalWeather>
+          </Fragment>
+        </Transition>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -355,43 +330,41 @@ const WeatherModal = () => {
           <section className="flex flex-col items-center justify-center py-2 bg-green-500">
             left
             <div className="   rounded-3xl border-solid border-accentd ">
-                <a
-                  aria-current="page"
-                  className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
-                  href="#"
-                  onClick={() => setShowModalRecipe(true)}
-                >
-                  <h3 className="text-2xl font-bold">Get Weather</h3>
-                </a>
-              </div>
+              <a
+                aria-current="page"
+                className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
+                href="#"
+                onClick={() => setShowModalRecipe(true)}
+              >
+                <h3 className="text-2xl font-bold">Get Weather</h3>
+              </a>
+            </div>
             <button>Get Themperature</button>
             <button> back</button>
           </section>
           <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
-            {/* <Image
-  src={weatherImage ?? '/windowView.png'}
-  alt="window_view"
-  width={512}
-  height={512}
-  className="mt-200"
-/> */}
-      {weatherImage && <Image src={weatherImage} alt="Weather"  width={512}
-  height={512}  />}
-             <div>
-      {/* Your UI using weatherInfo */}
-      {weatherInfo && (
-        <div>
-          <h2> In {weatherInfo.name} now </h2>
-          <h2> temperature {weatherInfo.main.feels_like}</h2>
-          <h2>{weatherInfo.weather[0]?.description}</h2>
-          <h2> visibility is {weatherInfo.visibility} m</h2>
-          <h2>wind {weatherInfo.wind.speed} m/s</h2>
-        </div>
-      )}
-
-
-    </div>
+  
+           {weatherImage && (
+              <Image
+                src={weatherImage}
+                alt="Weather"
+                width={512}
+                height={512}
+              />
+          )} 
+            <div>
+       
+              {weatherInfo && (
+                <div>
+                  <h2> In {weatherInfo.name} now </h2>
+                  <h2>{weatherInfo.weather[0]?.description}</h2>
+                  <h2> temperature {weatherInfo.main.feels_like}</h2>
+                  <h2> visibility is {weatherInfo.visibility} m</h2>
+                  <h2>wind {weatherInfo.wind.speed} m/s</h2>
+                </div>
+              )}
+            </div>
           </section>
           <section className="flex flex-col items-center justify-center py-2 bg-yellow-500">
             right

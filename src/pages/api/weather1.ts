@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type {WeatherData } from '../../utils/weatherTypes'
+import type { WeatherData } from '../../utils/weatherTypes'
 import type { WeatherDataResponse } from '../../utils/weatherTypes'
 import fs from 'fs'
 import { response } from 'express'
@@ -10,8 +10,7 @@ type Txt2ImgResponse = {
 export async function getWeatherInfo(location: string) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${location}&include=current&appid=${process.env.REACT_APP_API_KEY}`,
-
-    )
+  )
 
   if (response.status >= 200 && response.status < 300) {
     const dataWeatherFromAPI: WeatherData =
@@ -97,7 +96,7 @@ export default async function handlerWeather(
       month: 'long',
     })
     const name = weatherInfo.name
-  console.log('weatherInfo:  ',weatherInfo)
+    console.log('weatherInfo:  ', weatherInfo)
     //===================================================================================================
     // Build a prompt for the image generator
     const promptWeather = `Show an image of 
@@ -110,45 +109,44 @@ export default async function handlerWeather(
    `
     console.log('promptWeather is:  ', promptWeather)
     //===================================================================================================
-    
-  //  send the prompt to the Stable Diffusion API
-  const fetchWeatherIMG = async (promptWeather: string) => {
-    const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
-  
-    const payloadWindow = {
-      prompt: promptWeather,
-      negative_prompt:"people, animals"
-    }
-  
-    // Send the payload to the API
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payloadWindow),
-    });
-  
-    const data = (await response.json()) as Txt2ImgResponse;  
-    if (typeof data.images[0] === 'string') {
-      const imageBuffer = Buffer.from(data.images[0], 'base64');
-      fs.writeFileSync('./public/windowView.png', imageBuffer)
-    } else {
-      console.error('Expected a string but got', typeof data.images[0]);
-    }
-  }
-  await fetchWeatherIMG(promptWeather)
+    const imgName = `windowView${Date.now()}.png`
+    //  send the prompt to the Stable Diffusion API
+    const fetchWeatherIMG = async (promptWeather: string) => {
+      const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
 
-// create a instance of WeatherDataResponse as a local variable
-const weatherDataResponse: WeatherDataResponse = {
-  weatherInfo,
-  image: '/windowView.png',
-}
+      const payloadWindow = {
+        prompt: promptWeather,
+        negative_prompt: 'people, animals',
+      }
+
+      // Send the payload to the API
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payloadWindow),
+      })
+
+      const data = (await response.json()) as Txt2ImgResponse
+      if (typeof data.images[0] === 'string') {
+        const imageBuffer = Buffer.from(data.images[0], 'base64')
+        fs.writeFileSync(`./public/${imgName}`, imageBuffer)
+      } else {
+        console.error('Expected a string but got', typeof data.images[0])
+      }
+    }
+    await fetchWeatherIMG(promptWeather)
+
+    // create a instance of WeatherDataResponse as a local variable
+    const weatherDataResponse: WeatherDataResponse = {
+      weatherInfo,
+      image: `/${imgName}`,
+    }
 
     res.status(200).json(
       // windowView to client side
-      weatherDataResponse
-    ,
+      weatherDataResponse,
     )
   } catch (error) {
     console.error(error)
@@ -164,40 +162,35 @@ const weatherDataResponse: WeatherDataResponse = {
   }
 }
 
+//   const fetchWeatherIMG = async (promptWeather: string) => {
+//     const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
 
+//     const payloadWindow = {
+//       prompt: promptWeather,
+//     }
 
+//     // Send the payload to the API
+//     fetch(url, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(payloadWindow),
+//     })
+//       .then((response) => response.json())
+//       .then((data: Txt2ImgResponse) => {
+//         if (typeof data.images[0] === 'string') {
+//           const imageBuffer = Buffer.from(data.images[0], 'base64')
+//           fs.writeFileSync('./public/windowView.png', imageBuffer)
+//           // const imageWindow = Image.open(io.BytesIO(base64.b64decode(r['images'][0])));
+//           // image.save('windowView.png');
 
-
-
-            //   const fetchWeatherIMG = async (promptWeather: string) => {
-  //     const url = 'http://127.0.0.1:7860/sdapi/v1/txt2img'
-
-  //     const payloadWindow = {
-  //       prompt: promptWeather,
-  //     }
-
-  //     // Send the payload to the API
-  //     fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(payloadWindow),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data: Txt2ImgResponse) => {
-  //         if (typeof data.images[0] === 'string') {
-  //           const imageBuffer = Buffer.from(data.images[0], 'base64')
-  //           fs.writeFileSync('./public/windowView.png', imageBuffer)
-  //           // const imageWindow = Image.open(io.BytesIO(base64.b64decode(r['images'][0])));
-  //           // image.save('windowView.png');
-
-  //           console.log('data.images[0] is:  ', 'windowView.png')
-  //         } else {
-  //           console.error('Expected a string but got', typeof data.images[0])
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error:', error)
-  //       })
-  // }
+//           console.log('data.images[0] is:  ', 'windowView.png')
+//         } else {
+//           console.error('Expected a string but got', typeof data.images[0])
+//         }
+//       })
+//       .catch((error) => {
+//         console.error('Error:', error)
+//       })
+// }
