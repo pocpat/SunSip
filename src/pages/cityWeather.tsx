@@ -29,6 +29,8 @@ const CityWeather = () => {
   const router = useRouter()
   const location = router.query.location as string
 
+
+
   useEffect(() => {
     fetch('/api/cocktail1')
       .then((response) => response.json())
@@ -36,25 +38,33 @@ const CityWeather = () => {
       .catch((error) => console.error('Error fetching data:', error))
   }, [])
 
-  const fetchWeatherInfoFromServer = async (): Promise<void> => {
+  const fetchWeatherInfoFromServer = async (requestedLocation: string): Promise<void> => {
     try {
+      // if (!location || (weatherInfo && weatherImage)) {
+      //   // If weather information and image already exist, do not fetch again
+      //   return;
+      // }
+      // setIsLoading(true);
+      if (!requestedLocation) return;
+
       const resWeatherInfoFromServer = await fetch(
-        `/api/weather1?location=${location}`,
+        `/api/weather1?location=${requestedLocation}`,
       )
 
       const dataFromWeatherAPI =
         (await resWeatherInfoFromServer.json()) as WeatherDataResponse
       if (dataFromWeatherAPI.weatherInfo && dataFromWeatherAPI.image) {
-        // setWeatherInfo(dataFromWeatherAPI.weatherInfo);
-        // setWeatherImage(dataFromWeatherAPI.image);
-        const weatherImage = setWeatherImage(dataFromWeatherAPI.image)
-        const weatherInfo = setWeatherInfo(dataFromWeatherAPI.weatherInfo)
-        console.log(weatherImage)
-        console.log(
-          'the weather info from dataFromWeatherAPI is: ',
-          weatherInfo,
-        )
+         setWeatherInfo(dataFromWeatherAPI.weatherInfo);
+         setWeatherImage(dataFromWeatherAPI.image);
+        // const weatherImage = setWeatherImage(dataFromWeatherAPI.image)
+        // const weatherInfo = setWeatherInfo(dataFromWeatherAPI.weatherInfo)
+        // console.log(weatherImage)
+        // console.log(
+        //   'the weather info from dataFromWeatherAPI is: ',
+        //   weatherInfo,
+        // )
       }
+
     } catch (error) {
       console.error(
         'There has been a problem with your fetch operation:',
@@ -71,12 +81,16 @@ const CityWeather = () => {
     setIsLoading(false)
   }
 
+  // useEffect(() => {
+  //   if (location && !weatherInfo && !weatherImage) {
+  //     void fetchWeatherInfoFromServer();
+  //   }
+  // }, [location, weatherInfo, weatherImage]);
   useEffect(() => {
     if (location) {
-      void fetchWeatherInfoFromServer()
+      void fetchWeatherInfoFromServer(location);
     }
-  }, [])
-
+  }, [location]);
 
   //======================>  Create Cocktail Modal <============================== //
   const CocktailMenuModal = () => {
