@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from './components/Header'
-import { CocktailData } from '~/utils/cocktailTypes'
+// import { CocktailData } from '~/utils/cocktailTypes'
 import ModalRecipe from './components/ModalRecipe'
 import { Transition } from '@headlessui/react'
 import { Fragment } from 'react'
@@ -10,10 +10,12 @@ import modalIMG from '/public/modalIMG6.png'
 import styles from '../styles/Home.module.css'
 // import wf from '/public/wf.png'
 import ModalWeather from './components/ModalWeather'
-import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
+// import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
 import { set } from 'mongoose'
-import windowView from '/public/windowView.png'
+
 import { useRouter } from 'next/router'
+import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
+import { CocktailData } from '~/utils/cocktailTypes'
 
 const CityWeather = () => {
   const [cocktail, setCocktail] = useState<CocktailData | null>(null)
@@ -21,15 +23,25 @@ const CityWeather = () => {
   const [showModalWeather, setShowModalWeather] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [displayedLocation, setDisplayedLocation] = useState('')
-  const [weatherInfo, setWeatherInfo] = useState<WeatherData | null>(null)
-  const [weatherImage, setWeatherImage] = useState<string | null>(null)
-  // const [weatherImage, setWeatherImage] = useState('/windowView.png')
-
+  // const [displayedLocation, setDisplayedLocation] = useState('')
+  // const [weatherInfo, setWeatherInfo] = useState<WeatherData | null>(null)
+  // const [weatherImage, setWeatherImage] = useState<string | null>(null)
+  const [weatherData, setWeatherData] = useState<{
+    info: WeatherData | null
+    image: string | null
+  }>({
+    info: null,
+    image: null,
+  })
   const router = useRouter()
   const location = router.query.location as string
 
-
+  const updateWeatherData = (
+    weatherInfo: WeatherData | null,
+    weatherImage: string | null,
+  ) => {
+    setWeatherData({ info: weatherInfo, image: weatherImage })
+  }
 
   useEffect(() => {
     fetch('/api/cocktail1')
@@ -38,14 +50,16 @@ const CityWeather = () => {
       .catch((error) => console.error('Error fetching data:', error))
   }, [])
 
-  const fetchWeatherInfoFromServer = async (requestedLocation: string): Promise<void> => {
+  const fetchWeatherInfoFromServer = async (
+    requestedLocation: string,
+  ): Promise<void> => {
     try {
       // if (!location || (weatherInfo && weatherImage)) {
       //   // If weather information and image already exist, do not fetch again
       //   return;
       // }
       // setIsLoading(true);
-      if (!requestedLocation) return;
+      if (!requestedLocation) return
 
       const resWeatherInfoFromServer = await fetch(
         `/api/weather1?location=${requestedLocation}`,
@@ -54,8 +68,12 @@ const CityWeather = () => {
       const dataFromWeatherAPI =
         (await resWeatherInfoFromServer.json()) as WeatherDataResponse
       if (dataFromWeatherAPI.weatherInfo && dataFromWeatherAPI.image) {
-         setWeatherInfo(dataFromWeatherAPI.weatherInfo);
-         setWeatherImage(dataFromWeatherAPI.image);
+        //  setWeatherInfo(dataFromWeatherAPI.weatherInfo);
+        //  setWeatherImage(dataFromWeatherAPI.image);
+        updateWeatherData(
+          dataFromWeatherAPI.weatherInfo,
+          dataFromWeatherAPI.image,
+        )
         // const weatherImage = setWeatherImage(dataFromWeatherAPI.image)
         // const weatherInfo = setWeatherInfo(dataFromWeatherAPI.weatherInfo)
         // console.log(weatherImage)
@@ -64,7 +82,6 @@ const CityWeather = () => {
         //   weatherInfo,
         // )
       }
-
     } catch (error) {
       console.error(
         'There has been a problem with your fetch operation:',
@@ -81,22 +98,17 @@ const CityWeather = () => {
     setIsLoading(false)
   }
 
-  // useEffect(() => {
-  //   if (location && !weatherInfo && !weatherImage) {
-  //     void fetchWeatherInfoFromServer();
-  //   }
-  // }, [location, weatherInfo, weatherImage]);
   useEffect(() => {
     if (location) {
-      void fetchWeatherInfoFromServer(location);
+      void fetchWeatherInfoFromServer(location)
     }
-  }, [location]);
+  }, [location])
 
   //======================>  Create Cocktail Modal <============================== //
   const CocktailMenuModal = () => {
-    const handleBackButtonClick = () => {
-      setShowModalRecipe(false) // Close the modal when the "Back" button is clicked
-    }
+    // const handleBackButtonClick = () => {
+    //   setShowModalRecipe(false) // Close the modal when the "Back" button is clicked
+    // }
     return (
       <div>
         <Transition
@@ -156,7 +168,11 @@ const CityWeather = () => {
                   <div className="flex flex-row">
                     <section>
                       <Image
-                        src={modalIMG}
+                        src={
+                          cocktail
+                            ? cocktail.strDrinkThumb
+                            : '/public/modalIMG6.png'
+                        }
                         alt="drink image"
                         width={300}
                         height={300}
@@ -229,14 +245,11 @@ const CityWeather = () => {
     )
   }
 
-  // ========================================================================= //
-  // ========================================================================= //
-
-  // ======================>  Create Weather Modal <============================== //
+  // ========================> Weather Modal <============================== //
   const WeatherModal = () => {
-    const handleBackButtonClick = () => {
-      setShowModalWeather(false) // Close the modal when the "Back" button is clicked
-    }
+    // const handleBackButtonClick = () => {
+    //   setShowModalRecipe(false) // Close the modal when the "Back" button is clicked
+    // }
     return (
       <div>
         <Transition
@@ -260,7 +273,10 @@ const CityWeather = () => {
                   <h5
                     className="flex-1 items-center  text-center text-xl font-medium leading-normal text-primaryd dark:text-neutral-200"
                     id="exampleModalLabel"
-                  ></h5>
+                  >
+                 
+                 <h2> In {weatherData.info ? weatherData.info.name : 'unknown location'} now </h2> 
+                                  </h5>
                   {/* <!--Close button--> */}
                   <button
                     type="button"
@@ -292,20 +308,27 @@ const CityWeather = () => {
                   data-te-modal-body-ref
                 >
                   <div className="flex flex-row">
-                    <div className="flex flex-col">
-                      <div className="flex flex-row">
+
+                   
                         <section className=" INGR mx-8 text-white">
                           <strong>Ingredient 1:</strong>
-                          <br />
-                          {cocktail?.strIngredient2 && (
-                            <>
-                              <strong>Ingredient 2:</strong>
-                            </>
+                          {weatherData.info && (
+                            <div>
+                              <h2> In {weatherData.info.name} now </h2>
+                              <h2>
+                                {weatherData.info.weather[0]?.description}
+                              </h2>
+                              <h2>
+                                temperature {weatherData.info.main.feels_like}
+                              </h2>
+                              <h2>
+                                visibility is {weatherData.info.visibility} m
+                              </h2>
+                              <h2>wind {weatherData.info.wind.speed} m/s</h2>
+                            </div>
                           )}
-                          <br />
                         </section>
-                      </div>
-                    </div>
+              
                   </div>
                 </div>
                 {/* <!--Modal footer--> */}
@@ -343,39 +366,38 @@ const CityWeather = () => {
         <div className="grid grid-cols-3 w-full">
           <section className="flex flex-col items-center justify-center py-2 bg-green-500">
             left
-            <div className="   rounded-3xl border-solid border-accentd ">
-              <a
-                aria-current="page"
-                className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
-                href="#"
-                onClick={() => setShowModalRecipe(true)}
-              >
-                <h3 className="text-2xl font-bold">Get Weather</h3>
-              </a>
+            <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
+              <div className="   rounded-3xl border-solid border-accentd ">
+                <a
+                  aria-current="page"
+                  className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
+                  href="#"
+                  onClick={() => setShowModalWeather(true)}
+                >
+                  <h3 className="text-2xl font-bold">Get Weather</h3>
+                </a>
+                {showModalWeather && <WeatherModal />}
+              </div>
             </div>
-            <button>Get Themperature</button>
-            <button> back</button>
           </section>
           <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
-  
-           {weatherImage && (
+            {weatherData.image && (
               <Image
-                src={weatherImage}
+                src={weatherData.image}
                 alt="Weather"
                 width={512}
                 height={512}
               />
-          )} 
+            )}
             <div>
-       
-              {weatherInfo && (
+              {weatherData.info && (
                 <div>
-                  <h2> In {weatherInfo.name} now </h2>
-                  <h2>{weatherInfo.weather[0]?.description}</h2>
-                  <h2> temperature {weatherInfo.main.feels_like}</h2>
-                  <h2> visibility is {weatherInfo.visibility} m</h2>
-                  <h2>wind {weatherInfo.wind.speed} m/s</h2>
+                  <h2> In {weatherData.info.name} now </h2>
+                  <h2>{weatherData.info.weather[0]?.description}</h2>
+                  <h2> temperature {weatherData.info.main.feels_like}</h2>
+                  <h2> visibility is {weatherData.info.visibility} m</h2>
+                  <h2>wind {weatherData.info.wind.speed} m/s</h2>
                 </div>
               )}
             </div>
@@ -400,9 +422,6 @@ const CityWeather = () => {
                 <p>
                   <strong>Drink Name:</strong> {cocktail.strDrink}
                 </p>
-                {/* <p>
-                <strong>Glass:</strong> {cocktail.strGlass}
-              </p> */}
               </div>
             )}
             <p>
@@ -416,21 +435,7 @@ const CityWeather = () => {
           </section>
         </div>
 
-        <div className=" flex flex-row  items-center  justify-center ">
-          {/* <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
-            <div className="   rounded-3xl border-solid border-accentd ">
-              <a
-                aria-current="page"
-                className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
-                href="#"
-                onClick={() => setShowModalRecipe(true)}
-              >
-                <h3 className="text-2xl font-bold">Get Receipt</h3>
-              </a>
-              {showModalRecipe && <CocktailMenuModal />}
-            </div>
-          </div> */}
-        </div>
+        <div className=" flex flex-row  items-center  justify-center "></div>
       </div>
     </div>
   )
