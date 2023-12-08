@@ -28,41 +28,34 @@ export default function Home() {
 
       const debouncedLocation = useDebounce(location, 500);
 
-      useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const data = await fetchCocktailData(debouncedLocation);
-            setCocktail(data);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        };
-      
-        if (debouncedLocation) {
-          fetchData().catch((error) => console.error('Error in fetchData:', error));
-        }
-      }, [debouncedLocation]);
+
   
     
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setLocation(value);
       };
-      const navigateToCityWeather = () => {
-        if (location.trim() !== '' && cocktail) { // Ensure both location and cocktail are available
-          router.push({
-            pathname: '/cityWeather',
-            query: { 
-              location: encodeURIComponent(location),
-              cocktailData: JSON.stringify(cocktail)
+      const navigateToCityWeather = async () => {
+        if (location.trim() !== '') {
+          const controller = new AbortController();
+          try {
+            const data = await fetchCocktailData(location, controller.signal);
+            setCocktail(data);
+            await router.push({
+              pathname: '/cityWeather',
+              query: {
+                location: encodeURIComponent(location),
+                cocktailData: JSON.stringify(cocktail)
+              }
+            });
+          } catch (error) {
+            if ((error as Error).name !== 'AbortError') {
+              console.error('Failed to navigate:', error);
             }
-          })
-          .catch((error) => {
-            console.error('Failed to navigate:', error);
-          });
+          }
         }
       };
-
+      
 
   return (
     <>
