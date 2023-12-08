@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { CocktailData } from '~/utils/cocktailTypes'
 import { fetchCocktailData } from '~/utils/fetchData'
-import { useDebounce } from '~/utils/useDebounce'
+// import { useDebounce } from '~/utils/useDebounce'
 
 
 export default function Home() {
@@ -22,39 +22,37 @@ export default function Home() {
     const value = e.target.value.trim()
     setLocation(value)
   }
-    // ===================== cocktail fetch =====================
-  
-      const queryLocation = router.query.location as string
 
-      const debouncedLocation = useDebounce(location, 500);
-
-
-  
-    
-      const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setLocation(value);
       };
-      const navigateToCityWeather = async () => {
-        if (location.trim() !== '') {
-          const controller = new AbortController();
-          try {
-            const data = await fetchCocktailData(location, controller.signal);
-            setCocktail(data);
-            await router.push({
-              pathname: '/cityWeather',
-              query: {
-                location: encodeURIComponent(location),
-                cocktailData: JSON.stringify(cocktail)
-              }
-            });
-          } catch (error) {
-            if ((error as Error).name !== 'AbortError') {
+
+
+
+      const navigateToCityWeather = () => {
+        const fetchDataAndNavigate = async () => {
+          if (location.trim() !== '') {
+            const controller = new AbortController();
+            try {
+              const data = await fetchCocktailData(location, controller.signal);
+              setCocktail(data);
+              await router.push({
+                pathname: '/cityWeather',
+                query: {
+                  location: encodeURIComponent(location),
+                  cocktailData: JSON.stringify(cocktail)
+                }
+              });
+            } catch (error) {
               console.error('Failed to navigate:', error);
             }
           }
-        }
+        };
+      
+        fetchDataAndNavigate().catch((error) => console.error('Error in fetchDataAndNavigate:', error));
       };
+      
       
 
   return (
@@ -116,27 +114,3 @@ export default function Home() {
     </>
   )
 }
-
-
-// ============= cocktail fetch old =====================
-  //     useEffect(() => {
-  //       let debounceTimeout: NodeJS.Timeout;
-    
-  //        const fetchData = async () => {
-  //   try {
-  //     const data = await fetchCocktailData(location);
-  //     setCocktail(data);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   } finally {
-  //     clearTimeout(debounceTimeout);
-  //   }
-  // };
-    
-  //       // Debounce the fetch by 500ms after the user stops typing
-  //       debounceTimeout = setTimeout(fetchCocktailData, 500);
-    
-  //       return () => {
-  //         clearTimeout(debounceTimeout); // Clear timeout on component unmount
-  //       };
-  //     }, [location]);
