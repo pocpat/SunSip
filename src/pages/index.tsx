@@ -1,11 +1,12 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import { api } from '~/utils/api'
+// import Link from 'next/link'
+// import { api } from '~/utils/api'
 import styles from '../styles/Home.module.css'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { CocktailData } from '~/utils/cocktailTypes'
 import { fetchCocktailData } from '~/utils/fetchData'
+import { useDebounce } from '~/utils/useDebounce'
 
 
 export default function Home() {
@@ -24,46 +25,23 @@ export default function Home() {
     // ===================== cocktail fetch =====================
   
       const queryLocation = router.query.location as string
-  //     useEffect(() => {
-  //       let debounceTimeout: NodeJS.Timeout;
-    
-  //        const fetchData = async () => {
-  //   try {
-  //     const data = await fetchCocktailData(location);
-  //     setCocktail(data);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   } finally {
-  //     clearTimeout(debounceTimeout);
-  //   }
-  // };
-    
-  //       // Debounce the fetch by 500ms after the user stops typing
-  //       debounceTimeout = setTimeout(fetchCocktailData, 500);
-    
-  //       return () => {
-  //         clearTimeout(debounceTimeout); // Clear timeout on component unmount
-  //       };
-  //     }, [location]);
-  useEffect(() => {
-   // let debounceTimeout: NodeJS.Timeout;
-    const fetchData = async () => {
-      try {
-        const data = await fetchCocktailData(location);
-        setCocktail(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-       // clearTimeout(debounceTimeout);
-        console.log(' finally cocktail', cocktail)
-      }
-    };
-   // debounceTimeout = setTimeout(fetchData, 500);
-    return () => {
-      //clearTimeout(debounceTimeout);
-      console.log('return cocktail', cocktail)
-    };
-  }, [location]);
+
+      const debouncedLocation = useDebounce(location, 500);
+
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const data = await fetchCocktailData(debouncedLocation);
+            setCocktail(data);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+      
+        if (debouncedLocation) {
+          fetchData().catch((error) => console.error('Error in fetchData:', error));
+        }
+      }, [debouncedLocation]);
   
     
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,14 +62,6 @@ export default function Home() {
           });
         }
       };
-
-
-
-
-
-
-
-
 
 
   return (
@@ -153,3 +123,27 @@ export default function Home() {
     </>
   )
 }
+
+
+// ============= cocktail fetch old =====================
+  //     useEffect(() => {
+  //       let debounceTimeout: NodeJS.Timeout;
+    
+  //        const fetchData = async () => {
+  //   try {
+  //     const data = await fetchCocktailData(location);
+  //     setCocktail(data);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   } finally {
+  //     clearTimeout(debounceTimeout);
+  //   }
+  // };
+    
+  //       // Debounce the fetch by 500ms after the user stops typing
+  //       debounceTimeout = setTimeout(fetchCocktailData, 500);
+    
+  //       return () => {
+  //         clearTimeout(debounceTimeout); // Clear timeout on component unmount
+  //       };
+  //     }, [location]);
