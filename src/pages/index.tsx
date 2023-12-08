@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { CocktailData } from '~/utils/cocktailTypes'
+import { fetchCocktailData } from '~/utils/fetchData'
 
 
 export default function Home() {
@@ -23,34 +24,47 @@ export default function Home() {
     // ===================== cocktail fetch =====================
   
       const queryLocation = router.query.location as string
-      useEffect(() => {
-        let debounceTimeout: NodeJS.Timeout;
+  //     useEffect(() => {
+  //       let debounceTimeout: NodeJS.Timeout;
     
-        const fetchCocktailData = () => {
-          if (location.trim() !== '') {
-            fetch('/api/cocktail1')
-              .then((response) => response.json())
-              .then((data: CocktailData) => {
-                setCocktail(data); // Set the fetched cocktail data in state
-              })
-              .catch((error) => {
-                // Handle error if fetch fails
-                console.error('Error fetching data:', error);
-              })
-              .finally(() => {
-                // Reset debounce timeout
-                clearTimeout(debounceTimeout);
-              });
-          }
-        };
+  //        const fetchData = async () => {
+  //   try {
+  //     const data = await fetchCocktailData(location);
+  //     setCocktail(data);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   } finally {
+  //     clearTimeout(debounceTimeout);
+  //   }
+  // };
     
-        // Debounce the fetch by 500ms after the user stops typing
-        debounceTimeout = setTimeout(fetchCocktailData, 500);
+  //       // Debounce the fetch by 500ms after the user stops typing
+  //       debounceTimeout = setTimeout(fetchCocktailData, 500);
     
-        return () => {
-          clearTimeout(debounceTimeout); // Clear timeout on component unmount
-        };
-      }, [location]);
+  //       return () => {
+  //         clearTimeout(debounceTimeout); // Clear timeout on component unmount
+  //       };
+  //     }, [location]);
+  useEffect(() => {
+   // let debounceTimeout: NodeJS.Timeout;
+    const fetchData = async () => {
+      try {
+        const data = await fetchCocktailData(location);
+        setCocktail(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+       // clearTimeout(debounceTimeout);
+        console.log(' finally cocktail', cocktail)
+      }
+    };
+   // debounceTimeout = setTimeout(fetchData, 500);
+    return () => {
+      //clearTimeout(debounceTimeout);
+      console.log('return cocktail', cocktail)
+    };
+  }, [location]);
+  
     
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
