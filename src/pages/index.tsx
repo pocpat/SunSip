@@ -1,13 +1,9 @@
 import Head from 'next/head'
-// import Link from 'next/link'
-// import { api } from '~/utils/api'
 import styles from '../styles/Home.module.css'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { CocktailData } from '~/utils/cocktailTypes'
 import { fetchCocktailData } from '~/utils/fetchData'
-// import { useDebounce } from '~/utils/useDebounce'
-
 
 export default function Home() {
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -24,36 +20,34 @@ export default function Home() {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setLocation(value);
-      };
+    const value = e.target.value
+    setLocation(value)
+  }
 
+  const navigateToCityWeather = () => {
+    const fetchDataAndNavigate = async () => {
+      if (location.trim() !== '') {
+        const controller = new AbortController()
+        try {
+          const data = await fetchCocktailData(location, controller.signal)
+          setCocktail(data)
+          await router.push({
+            pathname: '/cityWeather',
+            query: {
+              location: encodeURIComponent(location),
+              cocktailData: JSON.stringify(cocktail),
+            },
+          })
+        } catch (error) {
+          console.error('Failed to navigate:', error)
+        }
+      }
+    }
 
-
-      const navigateToCityWeather = () => {
-        const fetchDataAndNavigate = async () => {
-          if (location.trim() !== '') {
-            const controller = new AbortController();
-            try {
-              const data = await fetchCocktailData(location, controller.signal);
-              setCocktail(data);
-              await router.push({
-                pathname: '/cityWeather',
-                query: {
-                  location: encodeURIComponent(location),
-                  cocktailData: JSON.stringify(cocktail)
-                }
-              });
-            } catch (error) {
-              console.error('Failed to navigate:', error);
-            }
-          }
-        };
-      
-        fetchDataAndNavigate().catch((error) => console.error('Error in fetchDataAndNavigate:', error));
-      };
-      
-      
+    fetchDataAndNavigate().catch((error) =>
+      console.error('Error in fetchDataAndNavigate:', error),
+    )
+  }
 
   return (
     <>
