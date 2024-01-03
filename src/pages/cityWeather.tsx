@@ -13,8 +13,12 @@ import { useRouter } from 'next/router'
 import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
 import { CocktailData } from '~/utils/cocktailTypes'
 
-const CityWeather = () => {
-  const [cocktail, setCocktail] = useState<CocktailData | null>(null)
+type CityWeatherProps = {
+  resetShowCityWeather: () => void;
+};
+
+const CityWeather = (props: CityWeatherProps) => {
+    const [cocktail, setCocktail] = useState<CocktailData | null>(null)
   const [showModalRecipe, setShowModalRecipe] = useState(false)
   // const [showModalWeather, setShowModalWeather] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -26,7 +30,7 @@ const CityWeather = () => {
   //   info: null,
   //   image: null,
   // })
-  const router = useRouter()
+  // const router = useRouter()
   //const location = router.query.location as string
   // const [location, setLocation] = useState('');
 
@@ -89,12 +93,63 @@ const CityWeather = () => {
   //   }
   // }, [location, router.query.location]);
 
-  useEffect(() => {
-    const { cocktailData } = router.query;
-    if (cocktailData) {
-      setCocktail(JSON.parse(cocktailData as string) as CocktailData);
+  // =========================== old 2 ===========================
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       const topElement = document.getElementById('topElement');
+//       if (topElement) {
+//         topElement.scrollIntoView({ behavior: 'smooth' });
+//       }
+//     };
+//     // Scroll to the top element when the component mounts or updates
+//     scrollToTop();
+//   }, []);
+//   useEffect(() => {
+//     const { cocktailData } = router.query
+//     if (cocktailData) {
+//       const targetSection = document.getElementById('targetSection');
+//     if (targetSection) {
+//       setCocktail(JSON.parse(cocktailData as string) as CocktailData)
+//       targetSection.scrollIntoView({ behavior: 'smooth' });
+//     }
+//   }
+// }, [router.query.cocktailData, setCocktail]);
+
+
+
+
+// =========================== old 3 ===========================
+// useEffect(() => {
+//   const targetSection = document.getElementById('targetSection');
+//   if (targetSection) {
+//     targetSection.scrollIntoView({ behavior: 'smooth' });
+//   }
+// }, []);
+
+
+// =========================== new ===========================
+
+useEffect(() => {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}, []);
+
+useEffect(() => {
+  const handleScroll = () => {
+    // Check if the scroll position is at the top of the page
+    if (window.pageYOffset === 0) {
+      props.resetShowCityWeather();
     }
-  }, [router.query.cocktailData]);
+  };
+
+  // Add the scroll event listener when the component mounts
+  window.addEventListener('scroll', handleScroll);
+
+  // Remove the event listener when the component unmounts
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, []);
+
 
   //======================>  Create Cocktail Modal <============================== //
   const CocktailMenuModal = () => {
@@ -337,25 +392,18 @@ const CityWeather = () => {
   // }
 
   return (
-    <div>
-      <div className={styles.container}>
-        <div
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            backgroundImage: 'url(/wf.png)',
-            backgroundSize: 'cover',
-            opacity: 0.5,
-            zIndex: -1,
-          }}
-        />
-        <Header />
-        <Link href="/">
-          <p>Back to home</p>
-        </Link>
+    <div >
+      <div id="topElement" />
+      <div  className="container   ">
+      <div
+        className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen bg-[#819077]"
+        style={{ backgroundImage: `url('/imgPrep/ClearBGdetails.png')` }}
+      >
+        {/* <Header /> */}
+        <Link href="/" onClick={props.resetShowCityWeather}><p>Back to home</p></Link>
+
         <div className="grid grid-cols-3 w-full">
-          <section className="flex flex-col items-center justify-center py-2 bg-green-500">
+          <section id="targetSection" className="flex flex-col items-center justify-center py-2 bg-green-500">
             left
             <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
               {/* <div className="   rounded-3xl border-solid border-accentd ">
@@ -428,6 +476,8 @@ const CityWeather = () => {
 
         <div className=" flex flex-row  items-center  justify-center "></div>
       </div>
+      </div>
+     
     </div>
   )
 }

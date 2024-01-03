@@ -15,3 +15,10 @@
     justify-content: center;
     align-items: center;
   }
+
+  .scrolled-page {
+    height: 100vh; 
+    background-image: url('/public/imgPrep/ClearBGdetails.png');
+    background-size: cover;
+    background-attachment: fixed; /* Enables the parallax effect */
+  }

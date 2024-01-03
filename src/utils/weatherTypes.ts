@@ -51,3 +51,5 @@ export interface Weather {
       images: string[];
     
     }
+
+  
