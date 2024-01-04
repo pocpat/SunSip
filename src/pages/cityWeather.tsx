@@ -93,38 +93,10 @@ const CityWeather = (props: CityWeatherProps) => {
   //   }
   // }, [location, router.query.location]);
 
-  // =========================== old 2 ===========================
-//   useEffect(() => {
-//     const scrollToTop = () => {
-//       const topElement = document.getElementById('topElement');
-//       if (topElement) {
-//         topElement.scrollIntoView({ behavior: 'smooth' });
-//       }
-//     };
-//     // Scroll to the top element when the component mounts or updates
-//     scrollToTop();
-//   }, []);
-//   useEffect(() => {
-//     const { cocktailData } = router.query
-//     if (cocktailData) {
-//       const targetSection = document.getElementById('targetSection');
-//     if (targetSection) {
-//       setCocktail(JSON.parse(cocktailData as string) as CocktailData)
-//       targetSection.scrollIntoView({ behavior: 'smooth' });
-//     }
-//   }
-// }, [router.query.cocktailData, setCocktail]);
 
 
 
 
-// =========================== old 3 ===========================
-// useEffect(() => {
-//   const targetSection = document.getElementById('targetSection');
-//   if (targetSection) {
-//     targetSection.scrollIntoView({ behavior: 'smooth' });
-//   }
-// }, []);
 
 
 // =========================== new ===========================
@@ -393,8 +365,10 @@ useEffect(() => {
 
   return (
     <div >
-      <div id="topElement" />
-      <div  className="container   ">
+      <div 
+      // id="topElement" 
+      />
+      <div  id="targetSection" className="container   ">
       <div
         className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen  bg-[#819077]"
         style={{ backgroundImage: `url('/imgPrep/ClearBGdetails.png')` }}
@@ -402,8 +376,9 @@ useEffect(() => {
         {/* <Header /> */}
         <Link href="/" onClick={props.resetShowCityWeather}><p>Back to home</p></Link>
 
-        <div className="grid grid-cols-3 w-full">
-          <section id="targetSection" className="flex flex-col items-center justify-center py-2 bg-green-500">
+        {/* <div className="mt-[100px] flex justify-around w-full"> */}
+        <div className="relative mt-[100px] w-full h-screen">
+          <section className="absolute top-0 left-0 flex flex-col items-center justify-center py-2 w-[400px] h-[840px] bg-[#afbaa7] opacity-80  backdrop-blur-3xl" style={{top: '2%', left: '9%'}}>
             left
             <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
               {/* <div className="   rounded-3xl border-solid border-accentd ">
@@ -419,6 +394,10 @@ useEffect(() => {
               </div> */}
             </div>
           </section>
+         
+          <section className="absolute top-0 right-0 flex flex-col items-center justify-center py-2 w-[600px] h-[600px] bg-[#a7abba] opacity-80" style={{top: 'calc(50% - 500px)', left: 'calc(50% - 300px)'}}>>
+            middle
+            </section>
           {/* <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
             {weatherData.image && (
@@ -441,7 +420,8 @@ useEffect(() => {
               )}
             </div>
           </section> */}
-          <section className="flex flex-col items-center justify-center py-2 bg-yellow-500">
+       
+          <section className="absolute bottom-0 right-0 flex flex-col items-center justify-center py-2 bg-[#afbaa7] opacity-90 w-[400px] h-[840px] backdrop-blur-3xl" style={{top: '2%', right: '9%'}}>
             right
             <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
               <div className="rounded-3xl border-solid border-accentd ">
@@ -472,6 +452,7 @@ useEffect(() => {
               />
             </p>
           </section>
+       
         </div>
 
         <div className=" flex flex-row  items-center  justify-center "></div>
