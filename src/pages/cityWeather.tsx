@@ -396,7 +396,7 @@ useEffect(() => {
       <div id="topElement" />
       <div  className="container   ">
       <div
-        className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen bg-[#819077]"
+        className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen  bg-[#819077]"
         style={{ backgroundImage: `url('/imgPrep/ClearBGdetails.png')` }}
       >
         {/* <Header /> */}
