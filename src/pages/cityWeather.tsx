@@ -12,7 +12,7 @@ import { set } from 'mongoose'
 import { useRouter } from 'next/router'
 import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
 import { CocktailData } from '~/utils/cocktailTypes'
-
+import WindowView from './components/WindowView'
 type CityWeatherProps = {
   resetShowCityWeather: () => void;
 };
@@ -395,8 +395,17 @@ useEffect(() => {
             </div>
           </section>
          
-          <section className="absolute top-0 right-0 flex flex-col items-center justify-center py-2 w-[600px] h-[600px] bg-[#a7abba] opacity-80" style={{top: 'calc(50% - 500px)', left: 'calc(50% - 300px)'}}>>
-            middle
+          <section 
+           className="flex  justify-center h-screen w-screen "
+        >
+           <div >
+            <WindowView resetShowCityWeather={function (): void {
+                throw new Error('Function not implemented.')
+              } }
+              
+         
+              />
+             </div>
             </section>
           {/* <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
