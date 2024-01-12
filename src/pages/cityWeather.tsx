@@ -8,11 +8,19 @@ import { Fragment } from 'react'
 import styles from '../styles/Home.module.css'
 import ModalWeather from './components/ModalWeather'
 import { set } from 'mongoose'
-
 import { useRouter } from 'next/router'
 import { WeatherData, WeatherDataResponse } from '~/utils/weatherTypes'
 import { CocktailData } from '~/utils/cocktailTypes'
 import WindowView from './components/WindowView'
+import bgPics from 'public/bgPics.png'
+import frontPlants from 'public/frontPlants.png'
+import  chair  from 'public/Chair.png'
+
+
+
+
+
+
 type CityWeatherProps = {
   resetShowCityWeather: () => void;
 };
@@ -368,15 +376,17 @@ useEffect(() => {
       <div 
       // id="topElement" 
       />
-      <div  id="targetSection" className="container   ">
+      <div  id="targetSection" className="container">
       <div
         className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen  bg-[#819077]"
-        style={{ backgroundImage: `url('/imgPrep/ClearBGdetails.png')` }}
       >
+
+
+<div style={{ marginTop: '-150px' }}> 
+<Image src={bgPics} alt="bgPics" layout="fill" objectFit="cover" />
+</div>
         {/* <Header /> */}
         <Link href="/" onClick={props.resetShowCityWeather}><p>Back to home</p></Link>
-
-        {/* <div className="mt-[100px] flex justify-around w-full"> */}
         <div className="relative mt-[100px] w-full h-screen">
           <section className="absolute top-0 left-0 flex flex-col items-center justify-center py-2 w-[400px] h-[840px] bg-[#afbaa7] opacity-80  backdrop-blur-3xl" style={{top: '2%', left: '9%'}}>
             left
@@ -398,7 +408,7 @@ useEffect(() => {
           <section 
            className="flex  justify-center h-screen w-screen "
         >
-           <div >
+           <div className='scale-140 '>
             <WindowView resetShowCityWeather={function (): void {
                 throw new Error('Function not implemented.')
               } }
@@ -407,6 +417,8 @@ useEffect(() => {
               />
              </div>
             </section>
+<Image src={frontPlants} alt="frontPlants" layout="fill" objectFit="cover" />
+<Image src={chair} alt="chair" layout="fill" objectFit="cover" />
           {/* <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
             {weatherData.image && (
@@ -464,7 +476,7 @@ useEffect(() => {
        
         </div>
 
-        <div className=" flex flex-row  items-center  justify-center "></div>
+        
       </div>
       </div>
      

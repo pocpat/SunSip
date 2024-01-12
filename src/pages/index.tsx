@@ -95,10 +95,11 @@ export default function Home() {
       {showCityWeather && (
   <div className="h-screen">
     <Image
-      src="/path-to-your-image.jpg" // Path to your image
+      src="public/bgPics.png" 
       alt="Background Image"
       layout="fill"
       objectFit="cover"
+      className="mt-150"
     />
     <CityWeather resetShowCityWeather={resetShowCityWeather} />
   </div>
@@ -107,3 +108,4 @@ export default function Home() {
   );
 }
 
+// TO FIX        wall pictures appear on the main page. 

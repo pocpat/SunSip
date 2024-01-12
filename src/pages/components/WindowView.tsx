@@ -195,7 +195,8 @@ const WindowView = (props: CityWeatherProps) => {
   return (
     <>
 
-   <section className="flex flex-col items-center justify-center py-2" 
+   <section className="flex flex-col items-center justify-center py-2 " 
+   style={{ marginTop: '120px', width: '110%',  height: '60%', scale: '1.3' }}
    >
 
             {/* {weatherData.image && (
@@ -223,7 +224,7 @@ const WindowView = (props: CityWeatherProps) => {
               <Image 
               src={windowframe} 
               alt="window-frame" 
-              className="absolute top-50 left-50 z-10"
+              className="absolute  z-5 "
               
               />
           </section> 
