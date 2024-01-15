@@ -49,15 +49,23 @@ export default function Home() {
 
   return (
     <>
-      {/* <Header /> */}
+      <header>
+        <div >
+          {/* <Header /> */}
+        </div>
+      </header>
       <main className="bg-[#819077] flex flex-col h-screen">
-        <div className="flex flex-col items-left justify-start flex-grow">
+      {/* =================     section input ====================== */}
+      <div >
+        <div className="flex flex-col items-left justify-start 
+        // flex-grow 
+        ">
           <h1
             className="
         text-5xl 
         font-bold  text-white 
         xl:text-[5rem] lg:text-[4.5rem] md:text-[4rem] sm:text-[3.5rem]
-        my-10"
+        my-10 mt-20 px-20"
           >
             Got a city in mind?
           </h1>
@@ -73,39 +81,57 @@ export default function Home() {
            focus:outline-none focus:ring-2
             focus:ring-blue-600
             text-5xl font-bold
-            mt-2 mb-10"
+            mt-2 mb-10 px-20"
           />
           <br></br>
+          <div className=' px-20'>
           <button
             className="bg-[#637f79] bg-opacity-50  p-2 rounded-md  xl:text-[4rem] lg:text-[3.5rem] md:text-[3rem] sm:text-[2.5rem]
                 my-10
                 text-5xl 
                 font-bold  text-white 
+               
+                w-60
                "
             onClick={handleClick}
           >
             GO
           </button>
-          <div>{error ? <p>Error: {error}</p> : isLoading ? <p>Loading...</p> : null}</div>
+          </div>
+          <div>
+            {error ? (
+              <p>Error: {error}</p>
+            ) : isLoading ? (
+              <p>Loading...</p>
+            ) : null}
+          </div>
         </div>
-        <div className="h-1/4 overflow-hidden transition-all duration-500">
-  {!showCityWeather && <CityWeather resetShowCityWeather={resetShowCityWeather} />}
-</div>
+       <div  className="
+       px-20 text-sm
+        font-bold  text-white 
+        xl:text-[3rem] lg:text-[2.5rem] md:text-[2rem] sm:text-[1.5rem]
+        my-10">Explanation what to expect after click the button. </div>
+        <div className="h-1/4 overflow-hidden transition-all duration-500 mx-0 px-0">
+          {!showCityWeather && (
+            <CityWeather resetShowCityWeather={resetShowCityWeather} />
+          )}
+        </div>
+        </div>
+      {/* =================     section images   ====================== */}
+      <section  >
+      <div >
+        
+        {showCityWeather && (
+          <div className="h-screen">
+        
+            <CityWeather resetShowCityWeather={resetShowCityWeather} />
+          </div>
+        )}
+        </div>
+        </section>
       </main>
-      {showCityWeather && (
-  <div className="h-screen">
-    <Image
-      src="public/bgPics.png" 
-      alt="Background Image"
-      layout="fill"
-      objectFit="cover"
-      className="mt-150"
-    />
-    <CityWeather resetShowCityWeather={resetShowCityWeather} />
-  </div>
-)}
     </>
-  );
+  )
 }
 
-// TO FIX        wall pictures appear on the main page. 
+

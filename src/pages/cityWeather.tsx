@@ -14,19 +14,15 @@ import { CocktailData } from '~/utils/cocktailTypes'
 import WindowView from './components/WindowView'
 import bgPics from 'public/bgPics.png'
 import frontPlants from 'public/frontPlants.png'
-import  chair  from 'public/Chair.png'
-
-
-
-
-
+import chair from 'public/Chair.png'
+import { Container } from 'postcss'
 
 type CityWeatherProps = {
-  resetShowCityWeather: () => void;
-};
+  resetShowCityWeather: () => void
+}
 
 const CityWeather = (props: CityWeatherProps) => {
-    const [cocktail, setCocktail] = useState<CocktailData | null>(null)
+  const [cocktail, setCocktail] = useState<CocktailData | null>(null)
   const [showModalRecipe, setShowModalRecipe] = useState(false)
   // const [showModalWeather, setShowModalWeather] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -101,35 +97,28 @@ const CityWeather = (props: CityWeatherProps) => {
   //   }
   // }, [location, router.query.location]);
 
+  // =========================== new ===========================
 
+  useEffect(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+  }, [])
 
-
-
-
-
-// =========================== new ===========================
-
-useEffect(() => {
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-}, []);
-
-useEffect(() => {
-  const handleScroll = () => {
-    // Check if the scroll position is at the top of the page
-    if (window.pageYOffset === 0) {
-      props.resetShowCityWeather();
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check if the scroll position is at the top of the page
+      if (window.pageYOffset === 0) {
+        props.resetShowCityWeather()
+      }
     }
-  };
 
-  // Add the scroll event listener when the component mounts
-  window.addEventListener('scroll', handleScroll);
+    // Add the scroll event listener when the component mounts
+    window.addEventListener('scroll', handleScroll)
 
-  // Remove the event listener when the component unmounts
-  return () => {
-    window.removeEventListener('scroll', handleScroll);
-  };
-}, []);
-
+    // Remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   //======================>  Create Cocktail Modal <============================== //
   const CocktailMenuModal = () => {
@@ -372,26 +361,37 @@ useEffect(() => {
   // }
 
   return (
-    <div >
-      <div 
-      // id="topElement" 
-      />
-      <div  id="targetSection" className="container">
-      <div
-        className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen  bg-[#819077]"
-      >
+    <div 
+    className="absolute h-screen w-screen overflow-hidden bg-[#819077]">
+    
+      <div id="targetSection" className="container">
+        <div className="scrolled-page bg-cover bg-no-repeat bg-center h-screen w-screen  ">
+        <div className=''>
+            <Image 
+            src={bgPics} 
+            alt="bgPics" 
+            layout="fill"
+
+  objectFit="cover"
+
+  style={{zIndex:'1'}} />
+          </div>
+
+          {/* <Header /> */}
+          <div className="relative  w-full h-auto ">
+
+    
 
 
-<div style={{ marginTop: '-150px' }}> 
-<Image src={bgPics} alt="bgPics" layout="fill" objectFit="cover" />
-</div>
-        {/* <Header /> */}
-        <Link href="/" onClick={props.resetShowCityWeather}><p>Back to home</p></Link>
-        <div className="relative mt-[100px] w-full h-screen">
-          <section className="absolute top-0 left-0 flex flex-col items-center justify-center py-2 w-[400px] h-[840px] bg-[#afbaa7] opacity-80  backdrop-blur-3xl" style={{top: '2%', left: '9%'}}>
-            left
-            <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
-              {/* <div className="   rounded-3xl border-solid border-accentd ">
+
+
+            {/* <section
+              className="absolute top-0 left-0 flex flex-col items-center justify-center py-2 w-[400px] h-[840px] bg-[#afbaa7] opacity-80  backdrop-blur-3xl"
+              style={{ top: '2%', left: '9%' }}
+            >
+              left
+              <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
+                {/* <div className="   rounded-3xl border-solid border-accentd ">
                 <a
                   aria-current="page"
                   className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
@@ -402,24 +402,43 @@ useEffect(() => {
                 </a>
                 // {showModalWeather && <WeatherModal />}
               </div> */}
-            </div>
-          </section>
-         
-          <section 
-           className="flex  justify-center h-screen w-screen "
-        >
-           <div className='scale-140 '>
-            <WindowView resetShowCityWeather={function (): void {
-                throw new Error('Function not implemented.')
-              } }
-              
-         
-              />
-             </div>
+              {/* </div> */}
+            {/* </section> */}
+
+
+
+
+
+
+
+
+            <section className=" h-screen w-screen bg-[#819077]">
+             <div className="sm:p-10 lg:p-20  flex items-center justify-center relative ">
+            <div className="absolute top-10 left-10 bg-purple-500">
+          <Link href="/" onClick={props.resetShowCityWeather}>
+            <p>Back to home</p>
+          </Link>
+          </div>
+                <WindowView
+                  resetShowCityWeather={function (): void {
+                    throw new Error('Function not implemented.')
+                  }}
+                />
+              </div>
             </section>
-<Image src={frontPlants} alt="frontPlants" layout="fill" objectFit="cover" />
-<Image src={chair} alt="chair" layout="fill" objectFit="cover" />
-          {/* <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
+            <Image
+              src={frontPlants}
+              alt="frontPlants"
+              layout="fill"
+              objectFit="cover"
+            />
+            <Image 
+            src={chair} 
+            alt="chair" 
+            layout="fill" 
+            objectFit="cover" />
+
+            {/* <section className="flex flex-col items-center justify-center py-2 bg-blue-500">
             center
             {weatherData.image && (
               <Image
@@ -441,12 +460,15 @@ useEffect(() => {
               )}
             </div>
           </section> */}
-       
-          <section className="absolute bottom-0 right-0 flex flex-col items-center justify-center py-2 bg-[#afbaa7] opacity-90 w-[400px] h-[840px] backdrop-blur-3xl" style={{top: '2%', right: '9%'}}>
-            right
-            <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
-              <div className="rounded-3xl border-solid border-accentd ">
-                {/* <a
+
+            {/* <section
+              className="absolute bottom-0 right-0 flex flex-col items-center justify-center py-2 bg-[#afbaa7] opacity-90 w-[400px] h-[840px] backdrop-blur-3xl"
+              style={{ top: '2%', right: '9%' }}
+            >
+              right
+              <div className="m-5 rounded-3xl bg-gradient-to-t from-tertiaryd to-secondaryd p-1 shadow-xl ">
+                <div className="rounded-3xl border-solid border-accentd ">
+                  {/* <a
                   aria-current="page"
                   className="text m-0  flex h-[100px] w-48 items-center justify-center  rounded-3xl border-solid  border-accentd bg-primaryd p-4  text-accentd ring-2  ring-tertiaryd  hover:bg-[#D9E5E2] "
                   href="#"
@@ -455,31 +477,28 @@ useEffect(() => {
                   <h3 className="text-2xl font-bold">Get Recipe</h3>
                 </a>
                 {showModalRecipe && <CocktailMenuModal />} */}
+                {/* </div>
               </div>
-            </div>
-            {cocktail && (
-              <div>
-                <p>
-                  <strong>Drink Name:</strong> {cocktail.strDrink}
-                </p>
-              </div>
-            )}
-            <p>
-              <Image
-                src={cocktail ? cocktail.strDrinkThumb : '/modalIMG6.png'}
-                alt="drink image"
-                width={200}
-                height={200}
-              />
-            </p>
-          </section>
-       
+              {cocktail && (
+                <div>
+                  <p>
+                    <strong>Drink Name:</strong> {cocktail.strDrink}
+                  </p>
+                </div>
+              )} */}
+              {/* <p>
+                <Image
+                  src={cocktail ? cocktail.strDrinkThumb : '/modalIMG6.png'}
+                  alt="drink image"
+                  width={200}
+                  height={200} */}
+                {/* // /> */}
+              {/* </p> */}
+            {/* </section> */} 
+          </div>
         </div>
-
-        
       </div>
-      </div>
-     
+      
     </div>
   )
 }

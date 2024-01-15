@@ -196,7 +196,7 @@ const WindowView = (props: CityWeatherProps) => {
     <>
 
    <section className="flex flex-col items-center justify-center py-2 " 
-   style={{ marginTop: '120px', width: '110%',  height: '60%', scale: '1.3' }}
+   style={{ marginTop: '80px', width: '110%',  height: '60%', scale: '1.1' }}
    >
 
             {/* {weatherData.image && (
